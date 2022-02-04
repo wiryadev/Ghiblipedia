@@ -58,6 +58,7 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-placeholder:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+    implementation "io.coil-kt:coil-compose:2.0.0-alpha07"
 
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
