@@ -1,5 +1,6 @@
 package com.wiryadev.ghiblipedia.di
 
+import com.squareup.moshi.Moshi
 import com.wiryadev.ghiblipedia.BuildConfig
 import com.wiryadev.ghiblipedia.data.remote.GhibliService
 import okhttp3.OkHttpClient
@@ -25,9 +26,12 @@ val networkModule = module {
             .build()
     }
     single {
+        Moshi.Builder().build()
+    }
+    single {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://ghibliapi.herokuapp.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(get()))
             .client(get())
             .build()
         retrofit.create(GhibliService::class.java)
