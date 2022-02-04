@@ -32,7 +32,6 @@ val networkModule = module {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://ghibliapi.herokuapp.com/")
             .addConverterFactory(MoshiConverterFactory.create(get()))
-            .client(get())
             .build()
         retrofit.create(GhibliService::class.java)
     }
