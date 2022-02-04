@@ -35,13 +35,14 @@ fun FilmCard(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
-                navigateToDetail.invoke(film.id)
-            }
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable {
+                    navigateToDetail.invoke(film.id)
+                }
+                .padding(8.dp),
         ) {
             PosterImage(
                 film = film,
@@ -82,8 +83,8 @@ private fun PosterImage(
         contentDescription = film.title,
         modifier = modifier
             .size(
-                height = 60.dp,
-                width = 40.dp,
+                height = 90.dp,
+                width = 60.dp,
             )
             .clip(MaterialTheme.shapes.small)
             .placeholder(
