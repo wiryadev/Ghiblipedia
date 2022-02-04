@@ -14,7 +14,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
+import coil.compose.ImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.placeholder
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
@@ -23,6 +29,7 @@ import com.wiryadev.ghiblipedia.utils.dummyFilm
 @Composable
 fun FilmCard(
     film: Film,
+    isLoading: Boolean,
     navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -40,11 +47,25 @@ fun FilmCard(
         ) {
             PosterImage(
                 film = film,
-                modifier = Modifier.padding(end = 16.dp)
+                isLoading = isLoading,
+                modifier = Modifier
+                    .padding(end = 16.dp)
             )
             Column {
-                FilmTitle(title = film.title)
-                ReleaseDateAndRunTime(film = film)
+                FilmTitle(
+                    title = film.title,
+                    modifier = Modifier.placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
+                )
+                ReleaseDateAndRunTime(
+                    film = film,
+                    modifier = Modifier.placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade(),
+                    )
+                )
             }
         }
     }
@@ -53,10 +74,13 @@ fun FilmCard(
 @Composable
 private fun PosterImage(
     film: Film,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val painter = rememberAsyncImagePainter(model = film.image)
+    val isPainterLoading = painter.state is AsyncImagePainter.State.Loading
     Image(
-        painter = rememberAsyncImagePainter(model = film.image),
+        painter = painter,
         contentDescription = film.title,
         modifier = modifier
             .size(
@@ -64,22 +88,29 @@ private fun PosterImage(
                 width = 40.dp,
             )
             .clip(MaterialTheme.shapes.small)
+            .placeholder(
+                visible = isLoading || isPainterLoading,
+                highlight = PlaceholderHighlight.fade(),
+            )
     )
 }
 
 @Composable
 private fun FilmTitle(
     title: String,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = title,
-        style = MaterialTheme.typography.subtitle1
+        style = MaterialTheme.typography.subtitle1,
+        modifier = modifier,
     )
 }
 
 @Composable
 private fun ReleaseDateAndRunTime(
-    film: Film
+    film: Film,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = stringResource(
@@ -90,6 +121,7 @@ private fun ReleaseDateAndRunTime(
             ),
         ),
         style = MaterialTheme.typography.body2,
+        modifier = modifier,
     )
 }
 
@@ -100,6 +132,7 @@ fun FilmCardPreview() {
         Surface {
             FilmCard(
                 film = dummyFilm,
+                isLoading = false,
                 navigateToDetail = {},
             )
         }

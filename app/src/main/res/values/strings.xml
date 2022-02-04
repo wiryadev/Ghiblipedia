@@ -2,4 +2,5 @@
     <string name="app_name">Ghiblipedia</string>
     
     <string name="home_film_year_and_duration">%1$s \t • %2$s min</string>
+    <string name="retry">Retry</string>
 </resources>
