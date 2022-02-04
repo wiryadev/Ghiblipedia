@@ -1,8 +1,7 @@
 package com.wiryadev.ghiblipedia
 
 import android.app.Application
-import com.wiryadev.ghiblipedia.di.networkModule
-import com.wiryadev.ghiblipedia.di.repositoryModule
+import com.wiryadev.ghiblipedia.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -15,13 +14,14 @@ class GhiblipediApp : Application() {
 
         startKoin {
             androidLogger(
-                level = if (BuildConfig.DEBUG) Level.DEBUG else Level.NONE
+                level = if (BuildConfig.DEBUG) Level.ERROR else Level.NONE
             )
             androidContext(this@GhiblipediApp)
             modules(
                 listOf(
                     networkModule,
                     repositoryModule,
+                    viewModelModule,
                 )
             )
         }
