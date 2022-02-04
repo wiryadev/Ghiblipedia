@@ -10,19 +10,23 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.wiryadev.ghiblipedia.ui.films.FilmsRoute
+import com.wiryadev.ghiblipedia.ui.films.FilmsViewModel
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val viewModel = getViewModel<FilmsViewModel>()
             GhiblipediaTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    FilmsRoute(viewModel = viewModel)
                 }
             }
         }
