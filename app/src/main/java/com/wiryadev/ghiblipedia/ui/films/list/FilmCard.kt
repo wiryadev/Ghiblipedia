@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
@@ -77,7 +76,7 @@ private fun PosterImage(
     modifier: Modifier = Modifier,
 ) {
     val painter = rememberAsyncImagePainter(model = film.image)
-    val isPainterLoading = painter.state is AsyncImagePainter.State.Loading
+
     Image(
         painter = painter,
         contentDescription = film.title,
@@ -88,7 +87,7 @@ private fun PosterImage(
             )
             .clip(MaterialTheme.shapes.small)
             .placeholder(
-                visible = isLoading || isPainterLoading,
+                visible = isLoading,
                 highlight = PlaceholderHighlight.fade(),
             )
     )

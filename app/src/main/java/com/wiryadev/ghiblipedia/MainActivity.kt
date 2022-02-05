@@ -3,6 +3,7 @@ package com.wiryadev.ghiblipedia
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -65,6 +66,16 @@ fun AppNavHost(
             arguments = listOf(navArgument("id") {
                 type = NavType.StringType
             }),
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentScope.SlideDirection.Left,
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentScope.SlideDirection.Right,
+                )
+            }
         ) { backStackEntry ->
             val filmId = backStackEntry.arguments?.getString("id")
             val viewModel = getViewModel<FilmDetailViewModel>()
