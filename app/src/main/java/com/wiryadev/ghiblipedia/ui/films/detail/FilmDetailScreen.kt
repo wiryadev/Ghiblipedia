@@ -97,10 +97,12 @@ private fun FilmDetailContent(
         item {
             FilmDetailStat(
                 film = film,
-                modifier = Modifier.placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade(),
-                )
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade(),
+                    )
             )
         }
         item {
