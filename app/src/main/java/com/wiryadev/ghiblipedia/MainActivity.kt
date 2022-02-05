@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -15,10 +16,10 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.wiryadev.ghiblipedia.ui.films.FilmsRoute
-import com.wiryadev.ghiblipedia.ui.films.FilmsViewModel
 import com.wiryadev.ghiblipedia.ui.films.detail.FilmDetailRoute
 import com.wiryadev.ghiblipedia.ui.films.detail.FilmDetailViewModel
+import com.wiryadev.ghiblipedia.ui.films.list.FilmsRoute
+import com.wiryadev.ghiblipedia.ui.films.list.FilmsViewModel
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import org.koin.androidx.compose.getViewModel
 
@@ -67,8 +68,11 @@ fun AppNavHost(
         ) { backStackEntry ->
             val filmId = backStackEntry.arguments?.getString("id")
             val viewModel = getViewModel<FilmDetailViewModel>()
-            filmId?.let {
-                viewModel.showSelectedFilm(it)
+
+            LaunchedEffect(key1 = filmId){
+                filmId?.let {
+                    viewModel.showSelectedFilm(it)
+                }
             }
 
             FilmDetailRoute(

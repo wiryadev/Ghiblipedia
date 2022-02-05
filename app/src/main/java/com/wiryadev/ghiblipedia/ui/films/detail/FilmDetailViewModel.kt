@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 data class FilmDetailUiState(
     val film: Film? = null,
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val errorMessages: String? = null,
 )
 
@@ -29,6 +29,7 @@ class FilmDetailViewModel(
 
         viewModelScope.launch {
             val result = repository.getFilmDetail(filmId)
+
             _uiState.update {
                 when (result) {
                     is Result.Success -> it.copy(
