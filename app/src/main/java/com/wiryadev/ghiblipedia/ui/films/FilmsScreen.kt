@@ -1,6 +1,5 @@
 package com.wiryadev.ghiblipedia.ui.films
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,16 +19,15 @@ import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.utils.dummyFilm
 
-
 @Composable
 fun FilmsScreen(
     uiState: FilmsUiState,
     scaffoldState: ScaffoldState,
     onRefreshClicked: () -> Unit,
+    navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(scaffoldState = scaffoldState, modifier = modifier) { innerPadding ->
-        val contentPadding = Modifier.padding(innerPadding)
+    Scaffold(scaffoldState = scaffoldState, modifier = modifier) {
         LoadingContent(
             empty = when (uiState) {
                 is FilmsUiState.HasPosts -> false
@@ -42,7 +40,7 @@ fun FilmsScreen(
                     FilmList(
                         films = uiState.films,
                         isLoading = uiState.isLoading,
-                        navigateToArticle = {}
+                        navigateToDetail = navigateToDetail,
                     )
                 }
                 is FilmsUiState.NoPosts -> {
@@ -64,7 +62,7 @@ fun FilmsScreen(
 }
 
 @Composable
-private fun LoadingContent(
+fun LoadingContent(
     empty: Boolean,
     emptyContent: @Composable () -> Unit,
     content: @Composable () -> Unit
@@ -94,7 +92,7 @@ fun FilmsPlaceholder() {
 fun FilmList(
     films: List<Film>,
     isLoading: Boolean,
-    navigateToArticle: (String) -> Unit,
+    navigateToDetail: (String) -> Unit,
 ) {
     LazyColumn(
         contentPadding = PaddingValues(all = 16.dp)
@@ -106,7 +104,7 @@ fun FilmList(
             FilmCard(
                 film = film,
                 isLoading = isLoading,
-                navigateToDetail = navigateToArticle,
+                navigateToDetail = navigateToDetail,
                 modifier = Modifier.padding(vertical = 8.dp),
             )
         }

@@ -1,4 +1,4 @@
-package com.wiryadev.ghiblipedia.ui.films
+package com.wiryadev.ghiblipedia.ui.films.detail
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
@@ -7,17 +7,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
 @Composable
-fun FilmsRoute(
-    viewModel: FilmsViewModel,
-    navigateToDetail: (String) -> Unit,
+fun FilmDetailRoute(
+    viewModel: FilmDetailViewModel,
+    onBackPressed: () -> Unit,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    FilmsScreen(
-        uiState = uiState,
-        scaffoldState = scaffoldState,
-        onRefreshClicked = { viewModel.refreshPage() },
-        navigateToDetail = navigateToDetail,
+    FilmDetailScreen(
+        uiState = uiState, onBackPressed = onBackPressed, scaffoldState = scaffoldState
     )
 }

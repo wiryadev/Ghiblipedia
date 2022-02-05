@@ -11,9 +11,10 @@ import kotlinx.coroutines.launch
 class FilmsViewModel(
     private val repository: GhibliRepository
 ) : ViewModel() {
+
     private val viewModelState = MutableStateFlow(FilmsViewModelState(isLoading = true))
 
-    val uiState = viewModelState
+    val uiState: StateFlow<FilmsUiState> = viewModelState
         .map { it.toUiState() }
         .stateIn(
             viewModelScope,
