@@ -2,6 +2,13 @@
 <resources>
 
     <style name="Theme.Ghiblipedia" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <!-- Status and Navigation bar color. -->
+        <item name="android:statusBarColor">#9C413E</item>
+    </style>
+    
+    <style name="Theme.Ghiblipedia.Splashscreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_content</item>
+        <item name="postSplashScreenTheme">@style/Theme.Ghiblipedia</item>
     </style>
 </resources>

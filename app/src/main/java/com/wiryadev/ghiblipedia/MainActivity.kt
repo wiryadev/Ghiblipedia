@@ -1,6 +1,8 @@
 package com.wiryadev.ghiblipedia
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
@@ -11,12 +13,14 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.wiryadev.ghiblipedia.ui.about.ProfileScreen
 import com.wiryadev.ghiblipedia.ui.films.detail.FilmDetailRoute
 import com.wiryadev.ghiblipedia.ui.films.detail.FilmDetailViewModel
 import com.wiryadev.ghiblipedia.ui.films.list.FilmsRoute
@@ -28,6 +32,9 @@ import org.koin.androidx.compose.getViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen()
+
         setContent {
             val navController = rememberAnimatedNavController()
             GhiblipediaTheme {
@@ -58,7 +65,8 @@ fun AppNavHost(
                 viewModel = viewModel,
                 navigateToDetail = { filmId ->
                     navController.navigate("films/$filmId")
-                }
+                },
+                navigateToAbout = {}
             )
         }
         composable(
@@ -80,7 +88,7 @@ fun AppNavHost(
             val filmId = backStackEntry.arguments?.getString("id")
             val viewModel = getViewModel<FilmDetailViewModel>()
 
-            LaunchedEffect(key1 = filmId){
+            LaunchedEffect(key1 = filmId) {
                 filmId?.let {
                     viewModel.showSelectedFilm(it)
                 }
@@ -90,6 +98,9 @@ fun AppNavHost(
                 viewModel = viewModel,
                 onBackPressed = { navController.navigateUp() }
             )
+        }
+        composable(route = "profile") {
+            ProfileScreen(onBackPressed = { navController.navigateUp() })
         }
     }
 }
