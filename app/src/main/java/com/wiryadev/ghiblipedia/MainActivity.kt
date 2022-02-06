@@ -66,7 +66,9 @@ fun AppNavHost(
                 navigateToDetail = { filmId ->
                     navController.navigate("films/$filmId")
                 },
-                navigateToAbout = {}
+                navigateToAbout = {
+                    navController.navigate("profile")
+                },
             )
         }
         composable(
