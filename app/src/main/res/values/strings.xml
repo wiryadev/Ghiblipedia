@@ -4,6 +4,8 @@
     <string name="home_film_year_and_duration">%1$s • %2$s min</string>
     <string name="retry">Retry</string>
     <string name="back">Back</string>
+    <string name="about">About</string>
+    <string name="profile">Profile</string>
     <string name="release">Release</string>
     <string name="runtime">Runtime</string>
     <string name="rating">Rating</string>

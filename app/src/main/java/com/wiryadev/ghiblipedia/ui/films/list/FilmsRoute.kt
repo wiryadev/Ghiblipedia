@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 fun FilmsRoute(
     viewModel: FilmsViewModel,
     navigateToDetail: (String) -> Unit,
+    navigateToAbout: () -> Unit,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -19,5 +20,6 @@ fun FilmsRoute(
         scaffoldState = scaffoldState,
         onRefreshClicked = { viewModel.refreshPage() },
         navigateToDetail = navigateToDetail,
+        navigateToAbout = navigateToAbout,
     )
 }

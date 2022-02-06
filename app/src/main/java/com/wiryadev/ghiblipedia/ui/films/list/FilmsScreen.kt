@@ -1,6 +1,5 @@
 package com.wiryadev.ghiblipedia.ui.films.list
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +9,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -27,6 +27,7 @@ fun FilmsScreen(
     scaffoldState: ScaffoldState,
     onRefreshClicked: () -> Unit,
     navigateToDetail: (String) -> Unit,
+    navigateToAbout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
@@ -37,6 +38,7 @@ fun FilmsScreen(
         topBar = {
             FilmsAppBar(
                 elevation = if (lazyListState.isScrolled) 4.dp else 0.dp,
+                navigateToAbout = navigateToAbout,
             )
         }
     ) {
@@ -90,12 +92,22 @@ fun LoadingContent(
 @Composable
 fun FilmsAppBar(
     elevation: Dp,
-    modifier: Modifier = Modifier
+    navigateToAbout: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         modifier = modifier,
         title = {
             Text(text = stringResource(id = R.string.app_name))
+        },
+        actions = {
+            IconButton(onClick = navigateToAbout) {
+                Icon(
+                    imageVector = Icons.Rounded.Info,
+                    contentDescription = stringResource(id = R.string.about),
+                    tint = MaterialTheme.colors.onSurface,
+                )
+            }
         },
         backgroundColor = MaterialTheme.colors.surface,
         elevation = elevation,
