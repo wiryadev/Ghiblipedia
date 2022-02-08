@@ -116,6 +116,34 @@ private fun FilmDetailContent(
                     )
             )
         }
+        item {
+            FilmMetadata(
+                film = film,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade(),
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+fun BackButton(
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = onBackPressed,
+        modifier = modifier,
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.ArrowBack,
+            contentDescription = stringResource(id = R.string.back),
+            tint = MaterialTheme.colors.background,
+        )
     }
 }
 
@@ -161,23 +189,6 @@ fun FilmDetailHeader(
                 end.linkTo(parent.end, margin = 16.dp)
                 width = Dimension.fillToConstraints
             }
-        )
-    }
-}
-
-@Composable
-fun BackButton(
-    onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    IconButton(
-        onClick = onBackPressed,
-        modifier = modifier,
-    ) {
-        Icon(
-            imageVector = Icons.Rounded.ArrowBack,
-            contentDescription = stringResource(id = R.string.back),
-            tint = MaterialTheme.colors.background,
         )
     }
 }
@@ -243,6 +254,53 @@ fun FilmDescription(
         ),
         modifier = modifier,
     )
+}
+
+@Composable
+fun FilmMetadata(
+    film: Film,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Row {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(
+                    text = stringResource(id = R.string.original_title),
+                    style = MaterialTheme.typography.caption
+                )
+            }
+            Text(
+                text = " ${film.originalTitle} (${film.originalTitleRomanised})",
+                style = MaterialTheme.typography.caption,
+            )
+        }
+        Row {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(
+                    text = stringResource(id = R.string.directed_by),
+                    style = MaterialTheme.typography.caption
+                )
+            }
+            Text(
+                text = " ${film.director}",
+                style = MaterialTheme.typography.caption,
+            )
+        }
+        Row {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(
+                    text = stringResource(id = R.string.produced_by),
+                    style = MaterialTheme.typography.caption
+                )
+            }
+            Text(
+                text = " ${film.producer}",
+                style = MaterialTheme.typography.caption,
+            )
+        }
+    }
 }
 
 @Composable

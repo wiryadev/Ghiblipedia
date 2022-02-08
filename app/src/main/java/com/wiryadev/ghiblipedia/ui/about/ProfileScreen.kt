@@ -2,6 +2,7 @@ package com.wiryadev.ghiblipedia.ui.about
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -56,12 +57,12 @@ fun ProfileScreen(
                         id = R.drawable.abrar
                     ),
                     contentDescription = stringResource(id = R.string.profile),
-                    contentScale = ContentScale.FillBounds,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(CircleShape)
                         .size(
-                            width = 108.dp,
-                            height = 160.dp,
+                            width = 180.dp,
+                            height = 180.dp,
                         ),
                 )
                 Text(

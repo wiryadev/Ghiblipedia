@@ -15,6 +15,8 @@ fun FilmDetailRoute(
     val uiState by viewModel.uiState.collectAsState()
 
     FilmDetailScreen(
-        uiState = uiState, onBackPressed = onBackPressed, scaffoldState = scaffoldState
+        uiState = uiState,
+        onBackPressed = onBackPressed,
+        scaffoldState = scaffoldState,
     )
 }

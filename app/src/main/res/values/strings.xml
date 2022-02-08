@@ -9,4 +9,7 @@
     <string name="release">Release</string>
     <string name="runtime">Runtime</string>
     <string name="rating">Rating</string>
+    <string name="original_title">Original Title:</string>
+    <string name="produced_by">Produced by</string>
+    <string name="directed_by">Directed by</string>
 </resources>
