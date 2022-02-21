@@ -25,9 +25,11 @@ val networkModule = module {
             .connectTimeout(120, TimeUnit.SECONDS)
             .build()
     }
+
     single {
         Moshi.Builder().build()
     }
+
     single {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://ghibliapi.herokuapp.com/")
