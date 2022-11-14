@@ -41,51 +41,54 @@ fun FilmsScreen(
                 navigateToAbout = navigateToAbout,
             )
         }
-    ) {
+    ) { paddingValues ->
         LoadingContent(
             empty = when (uiState) {
                 is FilmsUiState.HasPosts -> false
                 is FilmsUiState.NoPosts -> uiState.isLoading
             },
-            emptyContent = { FilmsPlaceholder() }
-        ) {
-            when (uiState) {
-                is FilmsUiState.HasPosts -> {
-                    FilmList(
-                        films = uiState.films,
-                        isLoading = uiState.isLoading,
-                        navigateToDetail = navigateToDetail,
-                        state = lazyListState,
-                    )
-                }
-                is FilmsUiState.NoPosts -> {
-                    Box(modifier = modifier.fillMaxSize()) {
-                        TextButton(
-                            onClick = onRefreshClicked,
-                            modifier.fillMaxSize()
-                        ) {
-                            Text(
-                                stringResource(id = R.string.retry),
-                                textAlign = TextAlign.Center,
-                            )
+            emptyContent = { FilmsPlaceholder() },
+            modifier = Modifier.padding(paddingValues),
+            content = {
+                when (uiState) {
+                    is FilmsUiState.HasPosts -> {
+                        FilmList(
+                            films = uiState.films,
+                            isLoading = uiState.isLoading,
+                            navigateToDetail = navigateToDetail,
+                            state = lazyListState,
+                        )
+                    }
+                    is FilmsUiState.NoPosts -> {
+                        Box(modifier = modifier.fillMaxSize()) {
+                            TextButton(
+                                onClick = onRefreshClicked,
+                                modifier.fillMaxSize()
+                            ) {
+                                Text(
+                                    stringResource(id = R.string.retry),
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
+        )
     }
 }
 
 @Composable
 fun LoadingContent(
     empty: Boolean,
-    emptyContent: @Composable () -> Unit,
-    content: @Composable () -> Unit
+    emptyContent: @Composable (Modifier) -> Unit,
+    content: @Composable (Modifier) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     if (empty) {
-        emptyContent()
+        emptyContent(modifier)
     } else {
-        content()
+        content(modifier)
     }
 }
 
@@ -104,7 +107,7 @@ fun FilmsAppBar(
             IconButton(onClick = navigateToAbout) {
                 Icon(
                     imageVector = Icons.Rounded.Info,
-                    contentDescription = stringResource(id = R.string.about),
+                    contentDescription = stringResource(id = R.string.about_page),
                     tint = MaterialTheme.colors.onSurface,
                 )
             }

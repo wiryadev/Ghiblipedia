@@ -18,7 +18,7 @@ fun FilmsRoute(
     FilmsScreen(
         uiState = uiState,
         scaffoldState = scaffoldState,
-        onRefreshClicked = { viewModel.refreshPage() },
+        onRefreshClicked = viewModel::refreshPage,
         navigateToDetail = navigateToDetail,
         navigateToAbout = navigateToAbout,
     )

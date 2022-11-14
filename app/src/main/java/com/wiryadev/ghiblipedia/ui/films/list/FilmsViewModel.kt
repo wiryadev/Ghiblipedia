@@ -12,7 +12,7 @@ class FilmsViewModel(
     private val repository: GhibliRepository
 ) : ViewModel() {
 
-    private val viewModelState = MutableStateFlow(FilmsViewModelState(isLoading = true))
+    private val viewModelState = MutableStateFlow(FilmsViewModelState())
 
     val uiState: StateFlow<FilmsUiState> = viewModelState
         .map { it.toUiState() }
