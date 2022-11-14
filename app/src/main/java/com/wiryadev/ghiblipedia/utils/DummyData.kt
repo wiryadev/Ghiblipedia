@@ -15,9 +15,4 @@ val dummyFilm = Film(
     releaseDate = "1988",
     runningTime = "86",
     rtScore = "93",
-    people = listOf(""),
-    species = listOf(""),
-    locations = listOf(""),
-    vehicles = listOf(""),
-    url = "",
 )

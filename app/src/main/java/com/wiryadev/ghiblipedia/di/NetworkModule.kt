@@ -2,7 +2,7 @@ package com.wiryadev.ghiblipedia.di
 
 import com.squareup.moshi.Moshi
 import com.wiryadev.ghiblipedia.BuildConfig
-import com.wiryadev.ghiblipedia.data.remote.GhibliService
+import com.wiryadev.ghiblipedia.data.remote.retrofit.GhibliService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module

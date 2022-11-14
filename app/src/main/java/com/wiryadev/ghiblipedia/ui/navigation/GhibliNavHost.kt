@@ -31,6 +31,6 @@ fun GhibliNavHost(
                 // navigate to detail
             }
         )
-        aboutScreen(onBackPressed = navController::navigateUp)
+        aboutScreen()
     }
 }

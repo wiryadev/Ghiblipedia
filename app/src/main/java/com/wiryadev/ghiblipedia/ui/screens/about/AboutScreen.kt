@@ -36,20 +36,14 @@ fun NavController.navigateToAbout(
     this.navigate(aboutNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.aboutScreen(
-    onBackPressed: () -> Unit
-) {
+fun NavGraphBuilder.aboutScreen() {
     composable(route = aboutNavigationRoute) {
-        AboutScreen(
-            onBackPressed = onBackPressed
-        )
+        AboutScreen()
     }
 }
 
 @Composable
-fun AboutScreen(
-    onBackPressed: () -> Unit
-) {
+fun AboutScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -101,6 +95,6 @@ fun AboutScreen(
 @Composable
 fun ProfilePreview() {
     GhiblipediaTheme {
-        AboutScreen(onBackPressed = {})
+        AboutScreen()
     }
 }
