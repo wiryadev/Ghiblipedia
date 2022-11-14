@@ -24,27 +24,27 @@ class FilmDetailViewModel(
     private val _uiState = MutableStateFlow(FilmDetailUiState(isLoading = true))
     val uiState: StateFlow<FilmDetailUiState> = _uiState.asStateFlow()
 
-    fun showSelectedFilm(filmId: String) {
-        _uiState.update { it.copy(isLoading = true) }
-
-        viewModelScope.launch {
-            val result = repository.getFilmDetail(filmId)
-
-            _uiState.update {
-                when (result) {
-                    is Result.Success -> it.copy(
-                        film = result.data,
-                        isLoading = false
-                    )
-                    is Result.Error -> {
-                        it.copy(
-                            errorMessages = result.exception.message,
-                            isLoading = false,
-                        )
-                    }
-                }
-            }
-        }
-    }
+//    fun showSelectedFilm(filmId: String) {
+//        _uiState.update { it.copy(isLoading = true) }
+//
+//        viewModelScope.launch {
+//            val result = repository.getFilmDetail(filmId)
+//
+//            _uiState.update {
+//                when (result) {
+//                    is Result.Success -> it.copy(
+//                        film = result.data,
+//                        isLoading = false
+//                    )
+//                    is Result.Error -> {
+//                        it.copy(
+//                            errorMessages = result.exception.message,
+//                            isLoading = false,
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 }

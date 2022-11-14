@@ -4,30 +4,17 @@ import com.wiryadev.ghiblipedia.data.remote.RemoteDataSource
 import com.wiryadev.ghiblipedia.data.remote.model.FilmDto
 import com.wiryadev.ghiblipedia.data.remote.model.asExternalModel
 import com.wiryadev.ghiblipedia.model.Film
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class GhibliRepositoryImpl(private val remoteDataSource: RemoteDataSource) : GhibliRepository {
 
-    override suspend fun getFilms(): Result<List<Film>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val films = remoteDataSource.getFilms().map(FilmDto::asExternalModel)
-                Result.Success(films)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
-        }
+    override fun getFilms(): Flow<List<Film>> = flow {
+        emit(remoteDataSource.getFilms().map(FilmDto::asExternalModel))
     }
 
-    override suspend fun getFilmDetail(filmId: String): Result<Film> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val film = remoteDataSource.getFilmDetail(filmId).asExternalModel()
-                Result.Success(film)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
-        }
+    override fun getFilmDetail(filmId: String): Flow<Film> = flow {
+        emit(remoteDataSource.getFilmDetail(filmId).asExternalModel())
     }
+
 }

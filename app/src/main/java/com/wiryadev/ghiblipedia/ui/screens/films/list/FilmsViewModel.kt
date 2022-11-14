@@ -4,8 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wiryadev.ghiblipedia.data.GhibliRepository
 import com.wiryadev.ghiblipedia.data.Result
+import com.wiryadev.ghiblipedia.data.asResult
 import com.wiryadev.ghiblipedia.model.Film
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FilmsViewModel(
@@ -27,16 +33,23 @@ class FilmsViewModel(
     }
 
     fun refreshPage() {
-        viewModelState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            val result = repository.getFilms()
-            viewModelState.update {
-                when (result) {
-                    is Result.Success -> it.copy(films = result.data, isLoading = false)
-                    is Result.Error -> {
-                        val errorMessages = it.errorMessages + result.exception.message.toString()
-                        it.copy(errorMessages = errorMessages, isLoading = false)
+            repository.getFilms().asResult().collect { result ->
+                viewModelState.update {
+                    when (result) {
+                        is Result.Success -> {
+                            it.copy(films = result.data, isLoading = false)
+                        }
+                        is Result.Error -> {
+                            val errorMessages =
+                                it.errorMessages + result.exception?.message.toString()
+                            it.copy(errorMessages = errorMessages, isLoading = false)
+                        }
+
+                        is Result.Loading -> {
+                            it.copy(isLoading = true)
+                        }
                     }
                 }
             }
