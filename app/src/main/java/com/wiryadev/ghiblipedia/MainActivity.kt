@@ -18,11 +18,11 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.wiryadev.ghiblipedia.ui.about.ProfileScreen
-import com.wiryadev.ghiblipedia.ui.films.detail.FilmDetailRoute
-import com.wiryadev.ghiblipedia.ui.films.detail.FilmDetailViewModel
-import com.wiryadev.ghiblipedia.ui.films.list.FilmsRoute
-import com.wiryadev.ghiblipedia.ui.films.list.FilmsViewModel
+import com.wiryadev.ghiblipedia.ui.screens.about.ProfileScreen
+import com.wiryadev.ghiblipedia.ui.screens.films.detail.FilmDetailRoute
+import com.wiryadev.ghiblipedia.ui.screens.films.detail.FilmDetailViewModel
+import com.wiryadev.ghiblipedia.ui.screens.films.list.FilmsRoute
+import com.wiryadev.ghiblipedia.ui.screens.films.list.FilmsViewModel
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import org.koin.androidx.compose.getViewModel
 

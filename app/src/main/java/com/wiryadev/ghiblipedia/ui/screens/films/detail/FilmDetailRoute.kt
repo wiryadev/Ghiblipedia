@@ -1,4 +1,4 @@
-package com.wiryadev.ghiblipedia.ui.films.detail
+package com.wiryadev.ghiblipedia.ui.screens.films.detail
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState

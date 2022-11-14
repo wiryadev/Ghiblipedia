@@ -1,4 +1,4 @@
-package com.wiryadev.ghiblipedia.ui.about
+package com.wiryadev.ghiblipedia.ui.screens.about
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
