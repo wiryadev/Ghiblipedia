@@ -1,8 +1,6 @@
 package com.wiryadev.ghiblipedia
 
-import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
@@ -98,11 +96,11 @@ fun AppNavHost(
 
             FilmDetailRoute(
                 viewModel = viewModel,
-                onBackPressed = { navController.navigateUp() }
+                onBackPressed = navController::navigateUp,
             )
         }
         composable(route = "profile") {
-            ProfileScreen(onBackPressed = { navController.navigateUp() })
+            ProfileScreen(onBackPressed = navController::navigateUp)
         }
     }
 }
