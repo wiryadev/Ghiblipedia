@@ -1,5 +1,6 @@
 package com.wiryadev.ghiblipedia.ui.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -9,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -24,17 +26,7 @@ fun GhibliAppNavigation(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = {
-            val destination = appState.currentTopLevelDestination
-            if (destination != null) {
-                GhibliTopAppBar(
-                    title = stringResource(id = destination.titleTextId),
-                    backgroundColor = MaterialTheme.colors.surface.copy(
-                        alpha = 0.9f
-                    )
-                )
-            }
-        },
+        backgroundColor = Color.Transparent,
         bottomBar = {
             if (appState.shouldShowBottomBar) {
                 BottomNavigation(

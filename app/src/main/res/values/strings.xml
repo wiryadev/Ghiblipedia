@@ -14,4 +14,6 @@
     <string name="original_title">Original Title:</string>
     <string name="produced_by">Produced by</string>
     <string name="directed_by">Directed by</string>
+    <string name="clear_query">Clear Query</string>
+    <string name="search">Search</string>
 </resources>

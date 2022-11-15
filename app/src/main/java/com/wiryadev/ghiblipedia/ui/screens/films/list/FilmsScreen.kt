@@ -11,12 +11,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -29,6 +33,7 @@ import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.components.BottomNavigationHeight
 import com.wiryadev.ghiblipedia.ui.components.FilmCard
+import com.wiryadev.ghiblipedia.ui.components.SearchAppBar
 import com.wiryadev.ghiblipedia.utils.dummyFilm
 import org.koin.androidx.compose.getViewModel
 
@@ -61,7 +66,8 @@ fun FilmsRoute(
 
     FilmsScreen(
         uiState = uiState,
-        onRefreshClicked = viewModel::refreshPage,
+//        onRefreshClicked = viewModel::refreshPage,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
         navigateToDetail = navigateToDetail,
         modifier = modifier,
     )
@@ -70,44 +76,58 @@ fun FilmsRoute(
 @Composable
 fun FilmsScreen(
     uiState: FilmsUiState,
-    onRefreshClicked: () -> Unit,
+//    onRefreshClicked: () -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
     navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
-    LoadingContent(
-        empty = when (uiState) {
-            is FilmsUiState.HasData -> false
-            is FilmsUiState.NoData -> uiState.isLoading
-        },
-        emptyContent = { FilmsPlaceholder() },
-        content = {
-            when (uiState) {
-                is FilmsUiState.HasData -> {
-                    FilmList(
-                        films = uiState.films,
-                        isLoading = uiState.isLoading,
-                        navigateToDetail = navigateToDetail,
-                        state = lazyListState,
-                    )
-                }
+    var searchQuery by remember { mutableStateOf(TextFieldValue(uiState.query)) }
 
-                is FilmsUiState.NoData -> {
-                    Box(modifier = modifier.fillMaxSize()) {
-                        TextButton(
-                            onClick = onRefreshClicked,
-                            modifier.fillMaxSize()
-                        ) {
+    Scaffold(
+        topBar = {
+            SearchAppBar(
+                value = uiState.query,
+                onValueChange = onSearchQueryChanged,
+                hint = stringResource(R.string.search),
+            )
+        }
+    ) { padding ->
+        LoadingContent(
+            empty = when (uiState) {
+                is FilmsUiState.HasData -> false
+                is FilmsUiState.NoData -> uiState.isLoading
+            },
+            emptyContent = { FilmsPlaceholder() },
+            content = {
+                when (uiState) {
+                    is FilmsUiState.HasData -> {
+                        FilmList(
+                            films = uiState.films,
+                            isLoading = uiState.isLoading,
+                            navigateToDetail = navigateToDetail,
+                            state = lazyListState,
+                            modifier = modifier.padding(padding)
+                        )
+                    }
+
+                    is FilmsUiState.NoData -> {
+                        Box(modifier = modifier.fillMaxSize()) {
+//                        TextButton(
+//                            onClick = onRefreshClicked,
+//                            modifier.fillMaxSize()
+//                        ) {
                             Text(
                                 stringResource(id = R.string.retry),
                                 textAlign = TextAlign.Center,
                             )
+//                        }
                         }
                     }
                 }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable

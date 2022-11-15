@@ -24,7 +24,7 @@ class FavoriteViewModel(
                 }
 
                 is Result.Error -> {
-                    val errorMessages = result.exception?.message.toString()
+                    val errorMessages = result.exception?.message
                     FavoriteViewModelState(errorMessage = errorMessages, isLoading = false)
                 }
 
