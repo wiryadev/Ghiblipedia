@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.wiryadev.ghiblipedia.ui.components.BottomNavItem
+import com.wiryadev.ghiblipedia.ui.components.GhibliTopAppBar
 
 @Composable
 fun GhibliAppNavigation(
@@ -18,7 +19,15 @@ fun GhibliAppNavigation(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = modifier.systemBarsPadding(),
+        modifier = modifier,
+        topBar = {
+            val destination = appState.currentTopLevelDestination
+            if (destination != null) {
+                GhibliTopAppBar(
+                    titleTextId = destination.titleTextId,
+                )
+            }
+        },
         bottomBar = {
             if (appState.shouldShowBottomBar) {
                 BottomNavBar(

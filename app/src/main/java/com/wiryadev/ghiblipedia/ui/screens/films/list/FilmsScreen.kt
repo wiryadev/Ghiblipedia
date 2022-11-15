@@ -8,17 +8,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -84,50 +80,39 @@ fun FilmsScreen(
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
+    LoadingContent(
+        empty = when (uiState) {
+            is FilmsUiState.HasPosts -> false
+            is FilmsUiState.NoPosts -> uiState.isLoading
+        },
+        emptyContent = { FilmsPlaceholder() },
+        content = {
+            when (uiState) {
+                is FilmsUiState.HasPosts -> {
+                    FilmList(
+                        films = uiState.films,
+                        isLoading = uiState.isLoading,
+                        navigateToDetail = navigateToDetail,
+                        state = lazyListState,
+                    )
+                }
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            FilmsAppBar(
-                elevation = if (lazyListState.isScrolled) 4.dp else 0.dp,
-            )
-        }
-    ) { paddingValues ->
-        LoadingContent(
-            empty = when (uiState) {
-                is FilmsUiState.HasPosts -> false
-                is FilmsUiState.NoPosts -> uiState.isLoading
-            },
-            emptyContent = { FilmsPlaceholder() },
-            modifier = Modifier.padding(paddingValues),
-            content = {
-                when (uiState) {
-                    is FilmsUiState.HasPosts -> {
-                        FilmList(
-                            films = uiState.films,
-                            isLoading = uiState.isLoading,
-                            navigateToDetail = navigateToDetail,
-                            state = lazyListState,
-                        )
-                    }
-
-                    is FilmsUiState.NoPosts -> {
-                        Box(modifier = modifier.fillMaxSize()) {
-                            TextButton(
-                                onClick = onRefreshClicked,
-                                modifier.fillMaxSize()
-                            ) {
-                                Text(
-                                    stringResource(id = R.string.retry),
-                                    textAlign = TextAlign.Center,
-                                )
-                            }
+                is FilmsUiState.NoPosts -> {
+                    Box(modifier = modifier.fillMaxSize()) {
+                        TextButton(
+                            onClick = onRefreshClicked,
+                            modifier.fillMaxSize()
+                        ) {
+                            Text(
+                                stringResource(id = R.string.retry),
+                                textAlign = TextAlign.Center,
+                            )
                         }
                     }
                 }
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable
@@ -142,21 +127,6 @@ fun LoadingContent(
     } else {
         content(modifier)
     }
-}
-
-@Composable
-fun FilmsAppBar(
-    elevation: Dp,
-    modifier: Modifier = Modifier,
-) {
-    TopAppBar(
-        modifier = modifier,
-        title = {
-            Text(text = stringResource(id = R.string.app_name))
-        },
-        backgroundColor = MaterialTheme.colors.surface,
-        elevation = elevation,
-    )
 }
 
 @Composable
@@ -217,6 +187,3 @@ private fun FilmList(
         }
     }
 }
-
-val LazyListState.isScrolled: Boolean
-    get() = firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0
