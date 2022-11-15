@@ -1,6 +1,7 @@
 package com.wiryadev.ghiblipedia.ui.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -17,7 +18,7 @@ fun GhibliAppNavigation(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.systemBarsPadding(),
         bottomBar = {
             if (appState.shouldShowBottomBar) {
                 BottomNavBar(

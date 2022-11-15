@@ -1,4 +1,4 @@
-package com.wiryadev.ghiblipedia.ui.screens.films.list
+package com.wiryadev.ghiblipedia.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,13 +19,16 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.wiryadev.ghiblipedia.R
-import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import com.wiryadev.ghiblipedia.utils.dummyFilm
 
 @Composable
 fun FilmCard(
-    film: Film,
+    filmId: String,
+    title: String,
+    imageUrl: String,
+    releaseDate: String,
+    duration: String,
     isLoading: Boolean,
     navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -38,27 +41,27 @@ fun FilmCard(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable {
-                    navigateToDetail.invoke(film.id)
-                }
+                .clickable { navigateToDetail(filmId) }
                 .padding(8.dp),
         ) {
             PosterImage(
-                film = film,
+                title = title,
+                imageUrl = imageUrl,
                 isLoading = isLoading,
                 modifier = Modifier
                     .padding(end = 16.dp)
             )
             Column {
                 FilmTitle(
-                    title = film.title,
+                    title = title,
                     modifier = Modifier.placeholder(
                         visible = isLoading,
                         highlight = PlaceholderHighlight.fade(),
                     ),
                 )
                 ReleaseDateAndRunTime(
-                    film = film,
+                    releaseDate = releaseDate,
+                    duration = duration,
                     modifier = Modifier.placeholder(
                         visible = isLoading,
                         highlight = PlaceholderHighlight.fade(),
@@ -71,15 +74,16 @@ fun FilmCard(
 
 @Composable
 private fun PosterImage(
-    film: Film,
+    imageUrl: String,
+    title: String,
     isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val painter = rememberAsyncImagePainter(model = film.image)
+    val painter = rememberAsyncImagePainter(model = imageUrl)
 
     Image(
         painter = painter,
-        contentDescription = film.title,
+        contentDescription = title,
         modifier = modifier
             .size(
                 height = 90.dp,
@@ -107,15 +111,16 @@ private fun FilmTitle(
 
 @Composable
 private fun ReleaseDateAndRunTime(
-    film: Film,
+    releaseDate: String,
+    duration: String,
     modifier: Modifier = Modifier,
 ) {
     Text(
         text = stringResource(
             id = R.string.home_film_year_and_duration,
             formatArgs = arrayOf(
-                film.releaseDate,
-                film.runningTime,
+                releaseDate,
+                duration,
             ),
         ),
         style = MaterialTheme.typography.body2,
@@ -129,9 +134,14 @@ fun FilmCardPreview() {
     GhiblipediaTheme {
         Surface {
             FilmCard(
-                film = dummyFilm,
+                filmId = dummyFilm.id,
+                title = dummyFilm.title,
+                imageUrl = dummyFilm.imageUrl,
+                releaseDate = dummyFilm.releaseDate,
+                duration = dummyFilm.duration,
                 isLoading = false,
                 navigateToDetail = {},
+
             )
         }
     }

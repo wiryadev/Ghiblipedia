@@ -11,7 +11,7 @@ val databaseModule = module {
             androidContext(),
             GhibliDb::class.java,
             "ghibli-db"
-        )
+        ).build()
     }
     single {
         get<GhibliDb>().filmDao()

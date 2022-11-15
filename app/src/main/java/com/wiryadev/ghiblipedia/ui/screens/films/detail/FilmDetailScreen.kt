@@ -212,7 +212,7 @@ fun FilmDetailStat(
         )
         FilmStatBox(
             statTitle = stringResource(id = R.string.runtime),
-            statValue = film.runningTime,
+            statValue = film.duration,
         )
     }
 }
@@ -308,7 +308,7 @@ private fun FilmBannerImage(
     film: Film,
     modifier: Modifier = Modifier
 ) {
-    val painter = rememberAsyncImagePainter(model = film.movieBanner)
+    val painter = rememberAsyncImagePainter(model = film.movieBannerUrl)
     val isPainterLoading = painter.state is AsyncImagePainter.State.Loading
 
     Image(
@@ -331,7 +331,7 @@ private fun FilmPosterImage(
     film: Film,
     modifier: Modifier = Modifier
 ) {
-    val painter = rememberAsyncImagePainter(model = film.image)
+    val painter = rememberAsyncImagePainter(model = film.imageUrl)
     val isPainterLoading = painter.state is AsyncImagePainter.State.Loading
 
     Image(

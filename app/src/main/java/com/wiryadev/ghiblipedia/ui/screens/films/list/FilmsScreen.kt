@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
@@ -29,6 +28,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
+import com.wiryadev.ghiblipedia.ui.components.FilmCard
 import com.wiryadev.ghiblipedia.utils.dummyFilm
 import org.koin.androidx.compose.getViewModel
 
@@ -162,7 +162,11 @@ private fun FilmsPlaceholder() {
     ) {
         items(10) {
             FilmCard(
-                film = dummyFilm,
+                filmId = dummyFilm.id,
+                title = dummyFilm.title,
+                imageUrl = dummyFilm.imageUrl,
+                releaseDate = dummyFilm.releaseDate,
+                duration = dummyFilm.duration,
                 isLoading = true,
                 navigateToDetail = {},
                 modifier = Modifier.padding(vertical = 8.dp),
@@ -192,7 +196,11 @@ private fun FilmList(
             key = { film -> film.id },
         ) { film ->
             FilmCard(
-                film = film,
+                filmId = film.id,
+                title = film.title,
+                imageUrl = film.imageUrl,
+                releaseDate = film.releaseDate,
+                duration = film.duration,
                 isLoading = isLoading,
                 navigateToDetail = navigateToDetail,
                 modifier = Modifier.padding(vertical = 8.dp),

@@ -2,9 +2,11 @@ package com.wiryadev.ghiblipedia.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "films")
 data class FilmEntity(
+    @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,
     @ColumnInfo(name = "title")
