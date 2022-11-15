@@ -33,7 +33,6 @@ class FilmsViewModel(
     }
 
     fun refreshPage() {
-
         viewModelScope.launch {
             repository.getFilms().asResult().collect { result ->
                 viewModelState.update {
@@ -64,12 +63,12 @@ private data class FilmsViewModelState(
 ) {
     fun toUiState(): FilmsUiState {
         return if (films.isNullOrEmpty()) {
-            FilmsUiState.NoPosts(
+            FilmsUiState.NoData(
                 isLoading = isLoading,
                 errorMessages = errorMessages,
             )
         } else {
-            FilmsUiState.HasPosts(
+            FilmsUiState.HasData(
                 films = films,
                 isLoading = isLoading,
                 errorMessages = errorMessages,
@@ -82,12 +81,12 @@ sealed interface FilmsUiState {
     val isLoading: Boolean
     val errorMessages: List<String>
 
-    data class NoPosts(
+    data class NoData(
         override val isLoading: Boolean,
         override val errorMessages: List<String>,
     ) : FilmsUiState
 
-    data class HasPosts(
+    data class HasData(
         val films: List<Film>,
         override val isLoading: Boolean,
         override val errorMessages: List<String>,

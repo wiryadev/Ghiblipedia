@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.components.BottomNavigationHeight
@@ -34,28 +33,20 @@ import com.wiryadev.ghiblipedia.utils.dummyFilm
 import org.koin.androidx.compose.getViewModel
 
 const val homeNavigationRoute = "home"
-const val homeGraphRoutePattern = "home_graph"
 
 fun NavController.navigateToHome(
     navOptions: NavOptions? = null
 ) {
-    this.navigate(homeGraphRoutePattern, navOptions)
+    this.navigate(homeNavigationRoute, navOptions)
 }
 
 fun NavGraphBuilder.homeScreen(
     navigateToDetail: (String) -> Unit,
-    nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
-    navigation(
-        route = homeGraphRoutePattern,
-        startDestination = homeNavigationRoute,
-    ) {
-        composable(route = homeNavigationRoute) {
-            FilmsRoute(
-                navigateToDetail = navigateToDetail,
-            )
-        }
-        nestedGraphs()
+    composable(route = homeNavigationRoute) {
+        FilmsRoute(
+            navigateToDetail = navigateToDetail,
+        )
     }
 }
 
@@ -86,13 +77,13 @@ fun FilmsScreen(
     val lazyListState = rememberLazyListState()
     LoadingContent(
         empty = when (uiState) {
-            is FilmsUiState.HasPosts -> false
-            is FilmsUiState.NoPosts -> uiState.isLoading
+            is FilmsUiState.HasData -> false
+            is FilmsUiState.NoData -> uiState.isLoading
         },
         emptyContent = { FilmsPlaceholder() },
         content = {
             when (uiState) {
-                is FilmsUiState.HasPosts -> {
+                is FilmsUiState.HasData -> {
                     FilmList(
                         films = uiState.films,
                         isLoading = uiState.isLoading,
@@ -101,7 +92,7 @@ fun FilmsScreen(
                     )
                 }
 
-                is FilmsUiState.NoPosts -> {
+                is FilmsUiState.NoData -> {
                     Box(modifier = modifier.fillMaxSize()) {
                         TextButton(
                             onClick = onRefreshClicked,
@@ -134,7 +125,7 @@ fun LoadingContent(
 }
 
 @Composable
-private fun FilmsPlaceholder() {
+fun FilmsPlaceholder() {
     LazyColumn(
         contentPadding = PaddingValues(
             top = 0.dp,
@@ -159,7 +150,7 @@ private fun FilmsPlaceholder() {
 }
 
 @Composable
-private fun FilmList(
+fun FilmList(
     films: List<Film>,
     isLoading: Boolean,
     navigateToDetail: (String) -> Unit,

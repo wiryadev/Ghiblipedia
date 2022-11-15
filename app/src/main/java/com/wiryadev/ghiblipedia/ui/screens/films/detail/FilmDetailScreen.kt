@@ -120,9 +120,13 @@ fun FilmDetailScreen(
             if (uiState.film != null) {
                 FloatingActionButton(
                     onClick = onFavoriteClick,
-                    modifier = Modifier.semantics(mergeDescendants = true) {
-                        contentDescription = "Favorite Button"
-                    }
+                    modifier = Modifier
+                        .padding(
+                            bottom = 48.dp
+                        )
+                        .semantics(mergeDescendants = true) {
+                            contentDescription = "Favorite Button"
+                        }
                 ) {
                     Icon(
                         imageVector = if (uiState.film.isFavorite) {
@@ -130,7 +134,7 @@ fun FilmDetailScreen(
                         } else {
                             Icons.Rounded.FavoriteBorder
                         },
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
