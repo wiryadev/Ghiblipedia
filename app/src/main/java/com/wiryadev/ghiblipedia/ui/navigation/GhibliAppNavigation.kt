@@ -31,7 +31,7 @@ fun GhibliAppNavigation(
     ) { padding ->
         GhibliNavHost(
             navController = appState.navController,
-            onBackClick = { /*TODO*/ },
+            onBackClick = appState::onBackPress,
             modifier = Modifier.padding(padding)
         )
     }

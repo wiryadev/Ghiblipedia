@@ -1,5 +1,6 @@
 package com.wiryadev.ghiblipedia.ui.screens.films.detail
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +9,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -20,6 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -29,6 +39,49 @@ import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import com.wiryadev.ghiblipedia.utils.dummyFilm
+import org.koin.androidx.compose.getViewModel
+
+const val filmDetailRoute = "film_detail"
+private const val filmIdArg = "filmId"
+
+class FilmArgs(val filmId: String) {
+    constructor(savedStateHandle: SavedStateHandle) : this(Uri.decode(savedStateHandle[filmIdArg]))
+}
+fun NavController.navigateToFilmDetail(filmId: String) {
+    val encodedId = Uri.encode(filmId)
+    this.navigate("$filmDetailRoute/$encodedId")
+}
+
+fun NavGraphBuilder.filmDetailScreen(
+    onBackPressed: () -> Unit,
+) {
+    composable(
+        route = "$filmDetailRoute/{$filmIdArg}",
+        arguments = listOf(
+            navArgument(filmIdArg) { NavType.StringType }
+        )
+    ) {
+        FilmDetailRoute(onBackPressed = onBackPressed)
+    }
+}
+
+@Composable
+fun FilmDetailRoute(
+    onBackPressed: () -> Unit,
+    viewModel: FilmDetailViewModel = getViewModel(),
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+) {
+    LaunchedEffect(Unit) {
+//        viewModel.showSelectedFilm()
+    }
+    val uiState by viewModel.uiState.collectAsState()
+
+    FilmDetailScreen(
+        uiState = uiState,
+        onBackPressed = onBackPressed,
+        scaffoldState = scaffoldState,
+    )
+}
 
 @Composable
 fun FilmDetailScreen(
@@ -39,7 +92,7 @@ fun FilmDetailScreen(
 ) {
     Scaffold(
         scaffoldState = scaffoldState
-    ) {
+    ) { padding ->
         if (uiState.isLoading) {
             FilmDetailPlaceholder(
                 onBackPressed = onBackPressed
@@ -53,6 +106,7 @@ fun FilmDetailScreen(
                         onBackPressed = onBackPressed
                     )
                 }
+
                 uiState.errorMessages != null -> {
                     Box(modifier = modifier.fillMaxSize()) {
                         Text(

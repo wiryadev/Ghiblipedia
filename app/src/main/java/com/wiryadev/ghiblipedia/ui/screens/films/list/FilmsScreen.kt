@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.components.FilmCard
@@ -33,20 +34,28 @@ import com.wiryadev.ghiblipedia.utils.dummyFilm
 import org.koin.androidx.compose.getViewModel
 
 const val homeNavigationRoute = "home"
+const val homeGraphRoutePattern = "home_graph"
 
 fun NavController.navigateToHome(
     navOptions: NavOptions? = null
 ) {
-    this.navigate(homeNavigationRoute, navOptions)
+    this.navigate(homeGraphRoutePattern, navOptions)
 }
 
 fun NavGraphBuilder.homeScreen(
     navigateToDetail: (String) -> Unit,
+    nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
-    composable(route = homeNavigationRoute) {
-        FilmsRoute(
-            navigateToDetail = navigateToDetail,
-        )
+    navigation(
+        route = homeGraphRoutePattern,
+        startDestination = homeNavigationRoute,
+    ) {
+        composable(route = homeNavigationRoute) {
+            FilmsRoute(
+                navigateToDetail = navigateToDetail,
+            )
+        }
+        nestedGraphs()
     }
 }
 

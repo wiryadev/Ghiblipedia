@@ -6,6 +6,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.wiryadev.ghiblipedia.ui.screens.about.aboutScreen
 import com.wiryadev.ghiblipedia.ui.screens.favorite.list.favoriteScreen
+import com.wiryadev.ghiblipedia.ui.screens.films.detail.filmDetailScreen
+import com.wiryadev.ghiblipedia.ui.screens.films.detail.navigateToFilmDetail
+import com.wiryadev.ghiblipedia.ui.screens.films.list.homeGraphRoutePattern
 import com.wiryadev.ghiblipedia.ui.screens.films.list.homeNavigationRoute
 import com.wiryadev.ghiblipedia.ui.screens.films.list.homeScreen
 
@@ -14,7 +17,7 @@ fun GhibliNavHost(
     navController: NavHostController,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    startDestination: String = homeNavigationRoute,
+    startDestination: String = homeGraphRoutePattern,
 ) {
     NavHost(
         navController = navController,
@@ -23,12 +26,15 @@ fun GhibliNavHost(
     ) {
         homeScreen(
             navigateToDetail = { filmId ->
-                // navigate to detail
+                navController.navigateToFilmDetail(filmId)
+            },
+            nestedGraphs = {
+                filmDetailScreen(onBackClick)
             }
         )
         favoriteScreen(
             navigateToDetail = { filmId ->
-                // navigate to detail
+                navController.navigateToFilmDetail(filmId)
             }
         )
         aboutScreen()
