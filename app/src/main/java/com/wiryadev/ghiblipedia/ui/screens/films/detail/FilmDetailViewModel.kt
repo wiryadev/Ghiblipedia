@@ -7,18 +7,15 @@ import com.wiryadev.ghiblipedia.data.GhibliRepository
 import com.wiryadev.ghiblipedia.data.Result
 import com.wiryadev.ghiblipedia.data.asResult
 import com.wiryadev.ghiblipedia.model.Film
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class FilmDetailUiState(
-    val film: Film? = null,
+    val film: DetailFilm? = null,
     val isLoading: Boolean = false,
     val errorMessages: String? = null,
 )
@@ -31,24 +28,54 @@ class FilmDetailViewModel(
 
     private val filmId = FilmArgs(savedStateHandle).filmId
 
-    val uiState: StateFlow<FilmDetailUiState> = repository.getFilmDetail(filmId).asResult()
-        .map { result ->
-            when (result) {
+//    val uiState: StateFlow<FilmDetailUiState> = repository.getFilmDetail(filmId).asResult()
+//        .map { result ->
+//            when (result) {
+//                is Result.Success -> FilmDetailUiState(
+//                    film = result.data,
+//                    isLoading = false
+//                )
+//
+//                is Result.Error -> {
+//                    FilmDetailUiState(
+//                        errorMessages = result.exception?.message,
+//                        isLoading = false,
+//                    )
+//                }
+//
+//                Result.Loading -> FilmDetailUiState(
+//                    isLoading = true
+//                )
+//            }
+//        }
+//        .stateIn(
+//            scope = viewModelScope,
+//            started = SharingStarted.WhileSubscribed(5_000),
+//            initialValue = FilmDetailUiState()
+//        )
+
+    val uiState: StateFlow<FilmDetailUiState> = combine(
+        repository.getFilmDetail(filmId),
+        repository.checkFavorite(filmId),
+        ::Pair
+    )
+        .asResult()
+        .map { detailFilmResult ->
+            when (detailFilmResult) {
                 is Result.Success -> FilmDetailUiState(
-                    film = result.data,
+                    film = DetailFilm(
+                        data = detailFilmResult.data.first,
+                        isFavorite = detailFilmResult.data.second > 0
+                    ),
                     isLoading = false
                 )
 
-                is Result.Error -> {
-                    FilmDetailUiState(
-                        errorMessages = result.exception?.message,
-                        isLoading = false,
-                    )
-                }
-
-                Result.Loading -> FilmDetailUiState(
-                    isLoading = true
+                is Result.Error -> FilmDetailUiState(
+                    errorMessages = detailFilmResult.exception?.message,
+                    isLoading = false
                 )
+
+                is Result.Loading -> FilmDetailUiState(isLoading = true)
             }
         }
         .stateIn(
@@ -57,4 +84,22 @@ class FilmDetailViewModel(
             initialValue = FilmDetailUiState()
         )
 
+    fun addOrRemoveFavorite() {
+        uiState.value.film?.let { detailFilm ->
+            viewModelScope.launch {
+                if (detailFilm.isFavorite) {
+                    repository.removeFromFavorite(detailFilm.data)
+                } else {
+                    repository.addFavoriteFilm(detailFilm.data)
+                }
+            }
+        }
+
+    }
+
 }
+
+data class DetailFilm(
+    val data: Film,
+    val isFavorite: Boolean,
+)

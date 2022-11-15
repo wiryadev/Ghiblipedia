@@ -14,5 +14,5 @@ val dummyFilm = Film(
     producer = "Hayao Miyazaki",
     releaseDate = "1988",
     duration = "86",
-    rtScore = "93",
+    rating = "93",
 )

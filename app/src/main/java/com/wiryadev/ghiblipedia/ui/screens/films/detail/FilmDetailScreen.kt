@@ -2,14 +2,32 @@ package com.wiryadev.ghiblipedia.ui.screens.films.detail
 
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,6 +65,7 @@ private const val filmIdArg = "filmId"
 class FilmArgs(val filmId: String) {
     constructor(savedStateHandle: SavedStateHandle) : this(Uri.decode(savedStateHandle[filmIdArg]))
 }
+
 fun NavController.navigateToFilmDetail(filmId: String) {
     val encodedId = Uri.encode(filmId)
     this.navigate("$filmDetailRoute/$encodedId")
@@ -71,14 +90,12 @@ fun FilmDetailRoute(
     viewModel: FilmDetailViewModel = getViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) {
-    LaunchedEffect(Unit) {
-//        viewModel.showSelectedFilm()
-    }
     val uiState by viewModel.uiState.collectAsState()
 
     FilmDetailScreen(
         uiState = uiState,
         onBackPressed = onBackPressed,
+        onFavoriteClick = viewModel::addOrRemoveFavorite,
         scaffoldState = scaffoldState,
     )
 }
@@ -87,11 +104,27 @@ fun FilmDetailRoute(
 fun FilmDetailScreen(
     uiState: FilmDetailUiState,
     onBackPressed: () -> Unit,
+    onFavoriteClick: () -> Unit,
     scaffoldState: ScaffoldState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        scaffoldState = scaffoldState
+        scaffoldState = scaffoldState,
+        floatingActionButton = {
+            if (uiState.film != null) {
+                FloatingActionButton(onClick = onFavoriteClick) {
+                    Icon(
+                        imageVector = if (uiState.film.isFavorite) {
+                            Icons.Rounded.Favorite
+                        } else {
+                            Icons.Rounded.FavoriteBorder
+                        },
+                        contentDescription = null
+                    )
+                }
+            }
+
+        }
     ) { padding ->
         if (uiState.isLoading) {
             FilmDetailPlaceholder(
@@ -101,7 +134,7 @@ fun FilmDetailScreen(
             when {
                 uiState.film != null -> {
                     FilmDetailContent(
-                        film = uiState.film,
+                        detailFilm = uiState.film,
                         isLoading = uiState.isLoading,
                         onBackPressed = onBackPressed
                     )
@@ -124,16 +157,25 @@ fun FilmDetailScreen(
 private fun FilmDetailPlaceholder(
     onBackPressed: () -> Unit,
 ) {
-    FilmDetailContent(film = dummyFilm, isLoading = true, onBackPressed = onBackPressed)
+    FilmDetailContent(
+        detailFilm = DetailFilm(
+            data = dummyFilm,
+            isFavorite = false
+        ),
+        isLoading = true,
+        onBackPressed = onBackPressed,
+    )
 }
 
 @Composable
 private fun FilmDetailContent(
-    film: Film,
+    detailFilm: DetailFilm,
     isLoading: Boolean,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val film = detailFilm.data
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier,
@@ -262,7 +304,7 @@ fun FilmDetailStat(
         )
         FilmStatBox(
             statTitle = stringResource(id = R.string.rating),
-            statValue = film.rtScore,
+            statValue = film.rating,
         )
         FilmStatBox(
             statTitle = stringResource(id = R.string.runtime),
@@ -420,8 +462,16 @@ private fun FilmTitle(
 @Composable
 fun DetailScreenPreview() {
     GhiblipediaTheme {
-        Scaffold {
-            FilmDetailContent(film = dummyFilm, isLoading = false, onBackPressed = { })
+        Scaffold { padding ->
+            FilmDetailContent(
+                detailFilm = DetailFilm(
+                    dummyFilm,
+                    false
+                ),
+                isLoading = false,
+                onBackPressed = { },
+                modifier = Modifier.padding(padding)
+            )
         }
     }
 }

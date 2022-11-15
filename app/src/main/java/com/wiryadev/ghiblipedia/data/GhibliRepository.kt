@@ -10,9 +10,11 @@ interface GhibliRepository {
 
     fun getFilmDetail(filmId: String): Flow<Film>
 
-    fun getFavoriteFilms(): Flow<List<FilmEntity>>
+    fun getFavoriteFilms(): Flow<List<Film>>
 
-    suspend fun addFavoriteFilm(filmEntity: FilmEntity)
+    fun checkFavorite(filmId: String): Flow<Int>
 
-    suspend fun removeFromFavorite(filmEntity: FilmEntity)
+    suspend fun addFavoriteFilm(film: Film)
+
+    suspend fun removeFromFavorite(film: Film)
 }

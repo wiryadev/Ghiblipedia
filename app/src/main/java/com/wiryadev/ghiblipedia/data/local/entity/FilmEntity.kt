@@ -3,6 +3,7 @@ package com.wiryadev.ghiblipedia.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.wiryadev.ghiblipedia.model.Film
 
 @Entity(tableName = "films")
 data class FilmEntity(
@@ -27,6 +28,38 @@ data class FilmEntity(
     val producer: String,
     @ColumnInfo(name = "release_date")
     val releaseDate: String,
+    @ColumnInfo(name = "rt_score")
+    val rtScore: String,
     @ColumnInfo(name = "running_time")
     val runningTime: String,
+)
+
+fun FilmEntity.asExternalModel() = Film(
+    id = id,
+    title = title,
+    description = description,
+    imageUrl = image,
+    movieBannerUrl = movieBanner,
+    originalTitle = originalTitle,
+    originalTitleRomanised = originalTitleRomanised,
+    producer = producer,
+    director = director,
+    releaseDate = releaseDate,
+    rating = rtScore,
+    duration = runningTime
+)
+
+fun Film.asEntity() = FilmEntity(
+    id = id,
+    title = title,
+    description = description,
+    director = director,
+    image = imageUrl,
+    movieBanner = movieBannerUrl,
+    originalTitle = originalTitle,
+    originalTitleRomanised = originalTitleRomanised,
+    producer = producer,
+    releaseDate = releaseDate,
+    runningTime = duration,
+    rtScore = rating
 )

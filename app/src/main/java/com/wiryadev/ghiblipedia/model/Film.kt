@@ -11,6 +11,6 @@ data class Film(
     val producer: String,
     val director: String,
     val releaseDate: String,
-    val rtScore: String,
+    val rating: String,
     val duration: String,
 )

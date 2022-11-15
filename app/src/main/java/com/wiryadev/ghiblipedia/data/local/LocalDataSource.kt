@@ -7,6 +7,8 @@ class LocalDataSource(private val filmDao: FilmDao) {
 
     fun getFavoriteFilms() = filmDao.getFavoriteFilms()
 
+    fun checkFavorite(filmId: String) = filmDao.checkFavorite(filmId)
+
     suspend fun addFavoriteFilm(
         filmEntity: FilmEntity
     ) = filmDao.addFavoriteFilm(filmEntity)

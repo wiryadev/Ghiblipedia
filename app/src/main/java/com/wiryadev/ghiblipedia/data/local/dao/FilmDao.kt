@@ -14,6 +14,9 @@ interface FilmDao {
     @Query("SELECT * FROM films")
     fun getFavoriteFilms(): Flow<List<FilmEntity>>
 
+    @Query("SELECT EXISTS (SELECT 1 FROM films WHERE id=:filmId)")
+    fun checkFavorite(filmId: String): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoriteFilm(filmEntity: FilmEntity)
 

@@ -52,7 +52,7 @@ fun FilmDto.asExternalModel() = Film(
     originalTitleRomanised = originalTitleRomanised,
     producer = producer,
     releaseDate = releaseDate,
-    rtScore = rtScore,
+    rating = rtScore,
     duration = runningTime,
     director = director,
 )
