@@ -2,7 +2,10 @@ package com.wiryadev.ghiblipedia.ui.screens.films.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -25,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
+import com.wiryadev.ghiblipedia.ui.components.BottomNavigationHeight
 import com.wiryadev.ghiblipedia.ui.components.FilmCard
 import com.wiryadev.ghiblipedia.utils.dummyFilm
 import org.koin.androidx.compose.getViewModel
@@ -134,7 +138,7 @@ private fun FilmsPlaceholder() {
     LazyColumn(
         contentPadding = PaddingValues(
             top = 0.dp,
-            bottom = 16.dp,
+            bottom = BottomNavigationHeight,
             start = 16.dp,
             end = 16.dp,
         ),
@@ -159,16 +163,19 @@ private fun FilmList(
     films: List<Film>,
     isLoading: Boolean,
     navigateToDetail: (String) -> Unit,
+    modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
 ) {
     LazyColumn(
         contentPadding = PaddingValues(
             top = 0.dp,
-            bottom = 16.dp,
+            bottom = BottomNavigationHeight
+                    + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
             start = 16.dp,
             end = 16.dp,
         ),
         state = state,
+        modifier = modifier,
     ) {
         items(
             items = films,

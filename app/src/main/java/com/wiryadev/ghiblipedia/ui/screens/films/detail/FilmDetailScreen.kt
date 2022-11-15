@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.FloatingActionButton
@@ -36,6 +40,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -112,7 +118,12 @@ fun FilmDetailScreen(
         scaffoldState = scaffoldState,
         floatingActionButton = {
             if (uiState.film != null) {
-                FloatingActionButton(onClick = onFavoriteClick) {
+                FloatingActionButton(
+                    onClick = onFavoriteClick,
+                    modifier = Modifier.semantics(mergeDescendants = true) {
+                        contentDescription = "Favorite Button"
+                    }
+                ) {
                     Icon(
                         imageVector = if (uiState.film.isFavorite) {
                             Icons.Rounded.Favorite
@@ -135,7 +146,7 @@ fun FilmDetailScreen(
                 uiState.film != null -> {
                     FilmDetailContent(
                         detailFilm = uiState.film,
-                        isLoading = uiState.isLoading,
+                        isLoading = false,
                         onBackPressed = onBackPressed
                     )
                 }
@@ -262,13 +273,15 @@ fun FilmDetailHeader(
                 end.linkTo(parent.end)
             }
         )
-        BackButton(
-            onBackPressed = onBackPressed,
+        Column(
             modifier = Modifier.constrainAs(back) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
             }
-        )
+        ) {
+            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+            BackButton(onBackPressed = onBackPressed)
+        }
         FilmPosterImage(
             film = film,
             modifier = Modifier.constrainAs(poster) {

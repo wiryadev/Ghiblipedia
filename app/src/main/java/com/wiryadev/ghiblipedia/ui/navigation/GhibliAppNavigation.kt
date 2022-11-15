@@ -1,8 +1,10 @@
 package com.wiryadev.ghiblipedia.ui.navigation
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.BottomNavigation
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -11,8 +13,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.wiryadev.ghiblipedia.ui.components.BottomNavItem
+import com.wiryadev.ghiblipedia.ui.components.GhibliBottomNavBar
 import com.wiryadev.ghiblipedia.ui.components.GhibliTopAppBar
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GhibliAppNavigation(
     appState: GhibliAppState,
@@ -24,13 +28,16 @@ fun GhibliAppNavigation(
             val destination = appState.currentTopLevelDestination
             if (destination != null) {
                 GhibliTopAppBar(
-                    titleTextId = destination.titleTextId,
+                    title = stringResource(id = destination.titleTextId),
+                    backgroundColor = MaterialTheme.colors.surface.copy(
+                        alpha = 0.9f
+                    )
                 )
             }
         },
         bottomBar = {
             if (appState.shouldShowBottomBar) {
-                BottomNavBar(
+                BottomNavigation(
                     destinations = appState.rootNavigationDestinations,
                     onNavigateToDestination = appState::navigateToRootNavigationItem,
                     currentDestination = appState.currentDestination,
@@ -41,21 +48,23 @@ fun GhibliAppNavigation(
         GhibliNavHost(
             navController = appState.navController,
             onBackClick = appState::onBackPress,
-            modifier = Modifier.padding(padding)
+            modifier = Modifier
+                .consumedWindowInsets(padding),
         )
     }
 }
 
 @Composable
-private fun BottomNavBar(
+private fun BottomNavigation(
     destinations: List<RootNavigationDestination>,
     onNavigateToDestination: (RootNavigationDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
 ) {
-    BottomNavigation(
+    GhibliBottomNavBar(
         modifier = modifier,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+        contentPadding = WindowInsets.navigationBars.asPaddingValues(),
     ) {
         destinations.forEach { destination ->
             BottomNavItem(

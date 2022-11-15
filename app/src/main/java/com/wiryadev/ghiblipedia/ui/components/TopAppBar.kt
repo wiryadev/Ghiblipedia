@@ -1,30 +1,52 @@
 package com.wiryadev.ghiblipedia.ui.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun GhibliTopAppBar(
-    @StringRes titleTextId:Int,
+    title: String,
     modifier: Modifier = Modifier,
-    elevation: Dp = 0.dp,
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    elevation: Dp = AppBarDefaults.TopAppBarElevation,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    TopAppBar(
-        modifier = modifier,
-        title = {
-            Text(text = stringResource(id = titleTextId))
-        },
-        actions = actions,
-        backgroundColor = MaterialTheme.colors.surface,
+    Surface(
+        color = backgroundColor,
+        contentColor = contentColor,
         elevation = elevation,
-    )
+        modifier = modifier,
+    ) {
+        TopAppBar(
+            title = {
+                Text(text = title)
+            },
+            backgroundColor = Color.Transparent,
+            actions = actions,
+            elevation = 0.dp,
+            modifier = Modifier.padding(
+                WindowInsets.statusBars
+                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
+                    .asPaddingValues()
+            ),
+        )
+    }
 }

@@ -9,7 +9,6 @@ import com.wiryadev.ghiblipedia.ui.screens.favorite.list.favoriteScreen
 import com.wiryadev.ghiblipedia.ui.screens.films.detail.filmDetailScreen
 import com.wiryadev.ghiblipedia.ui.screens.films.detail.navigateToFilmDetail
 import com.wiryadev.ghiblipedia.ui.screens.films.list.homeGraphRoutePattern
-import com.wiryadev.ghiblipedia.ui.screens.films.list.homeNavigationRoute
 import com.wiryadev.ghiblipedia.ui.screens.films.list.homeScreen
 
 @Composable
