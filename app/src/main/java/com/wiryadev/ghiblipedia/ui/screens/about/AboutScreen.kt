@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +25,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.wiryadev.ghiblipedia.R
+import com.wiryadev.ghiblipedia.ui.components.GhibliTopAppBar
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 
 const val aboutNavigationRoute = "about"
@@ -41,36 +44,43 @@ fun NavGraphBuilder.aboutScreen() {
 
 @Composable
 fun AboutScreen() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+    Scaffold(
+        topBar = {
+            GhibliTopAppBar(title = stringResource(id = R.string.about_page))
+        }
+    ) { padding ->
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
-            Image(
-                painter = painterResource(
-                    id = R.drawable.abrar
-                ),
-                contentDescription = stringResource(id = R.string.profile),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(
-                        width = 180.dp,
-                        height = 180.dp,
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    painter = painterResource(
+                        id = R.drawable.abrar
                     ),
-            )
-            Text(
-                text = "Abrar Wiryawan",
-                style = MaterialTheme.typography.h4,
-            )
-            Text(
-                text = "abrarwiryawan@gmail.com",
-                style = MaterialTheme.typography.subtitle2,
-            )
+                    contentDescription = stringResource(id = R.string.profile),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(
+                            width = 180.dp,
+                            height = 180.dp,
+                        ),
+                )
+                Text(
+                    text = "Abrar Wiryawan",
+                    style = MaterialTheme.typography.h4,
+                )
+                Text(
+                    text = "abrarwiryawan@gmail.com",
+                    style = MaterialTheme.typography.subtitle2,
+                )
+            }
         }
     }
 }

@@ -3,12 +3,10 @@ package com.wiryadev.ghiblipedia.ui.screens.films.detail
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -61,6 +59,7 @@ import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
+import com.wiryadev.ghiblipedia.ui.components.EmptyContent
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import com.wiryadev.ghiblipedia.utils.dummyFilm
 import org.koin.androidx.compose.getViewModel
@@ -116,6 +115,7 @@ fun FilmDetailScreen(
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
+        modifier = modifier,
         floatingActionButton = {
             if (uiState.film != null) {
                 FloatingActionButton(
@@ -151,17 +151,16 @@ fun FilmDetailScreen(
                     FilmDetailContent(
                         detailFilm = uiState.film,
                         isLoading = false,
-                        onBackPressed = onBackPressed
+                        onBackPressed = onBackPressed,
+                        modifier = Modifier.padding(padding)
                     )
                 }
 
-                uiState.errorMessages != null -> {
-                    Box(modifier = modifier.fillMaxSize()) {
-                        Text(
-                            text = uiState.errorMessages,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
+                uiState.errorMessage != null -> {
+                    EmptyContent(
+                        message = uiState.errorMessage,
+                        illustration = R.drawable.ic_not_found,
+                    )
                 }
             }
         }

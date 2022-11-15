@@ -1,14 +1,13 @@
 package com.wiryadev.ghiblipedia.ui.screens.favorite.list
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -16,9 +15,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.wiryadev.ghiblipedia.R
+import com.wiryadev.ghiblipedia.ui.components.EmptyContent
+import com.wiryadev.ghiblipedia.ui.components.GhibliTopAppBar
+import com.wiryadev.ghiblipedia.ui.components.LoadingContent
 import com.wiryadev.ghiblipedia.ui.screens.films.list.FilmList
 import com.wiryadev.ghiblipedia.ui.screens.films.list.FilmsPlaceholder
-import com.wiryadev.ghiblipedia.ui.screens.films.list.LoadingContent
 import org.koin.androidx.compose.getViewModel
 
 const val favoriteNavigationRoute = "favorite"
@@ -62,32 +63,38 @@ fun FavoriteScreen(
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
-    LoadingContent(
-        empty = when (uiState) {
-            is FavoriteUiState.HasData -> false
-            is FavoriteUiState.NoData -> uiState.isLoading
-        },
-        emptyContent = { FilmsPlaceholder() },
-        content = {
-            when (uiState) {
-                is FavoriteUiState.HasData -> {
-                    FilmList(
-                        films = uiState.films,
-                        isLoading = uiState.isLoading,
-                        navigateToDetail = navigateToDetail,
-                        state = lazyListState,
-                    )
-                }
+    Scaffold(
+        topBar = {
+            GhibliTopAppBar(title = stringResource(id = R.string.favorite))
+        }
+    ) { padding ->
+        LoadingContent(
+            empty = when (uiState) {
+                is FavoriteUiState.HasData -> false
+                is FavoriteUiState.NoData -> uiState.isLoading
+            },
+            emptyContent = { FilmsPlaceholder() },
+            content = {
+                when (uiState) {
+                    is FavoriteUiState.HasData -> {
+                        FilmList(
+                            films = uiState.films,
+                            isLoading = uiState.isLoading,
+                            navigateToDetail = navigateToDetail,
+                            state = lazyListState,
+                            modifier = Modifier.padding(padding)
+                        )
+                    }
 
-                is FavoriteUiState.NoData -> {
-                    Box(modifier = modifier.fillMaxSize()) {
-                        Text(
-                            stringResource(id = R.string.retry),
-                            textAlign = TextAlign.Center,
+                    is FavoriteUiState.NoData -> {
+                        EmptyContent(
+                            message = stringResource(R.string.empty_favorite),
+                            illustration = R.drawable.ic_no_data,
+                            modifier = Modifier.fillMaxSize(),
                         )
                     }
                 }
             }
-        }
-    )
+        )
+    }
 }

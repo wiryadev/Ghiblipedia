@@ -7,9 +7,10 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val LightColorPalette = lightColors(
-    primary = md_theme_light_primary,
-    primaryVariant = md_theme_light_primaryContainer,
-    secondary = md_theme_light_secondary
+    primary = primaryLightColor,
+    primaryVariant = primaryColor,
+    secondary = secondaryLightColor,
+    secondaryVariant = secondaryColor,
 
     /* Other default colors to override
     background = Color.White,
@@ -22,7 +23,9 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun GhiblipediaTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun GhiblipediaTheme(
+    content: @Composable () -> Unit
+) {
     MaterialTheme(
         colors = LightColorPalette,
         typography = Typography,

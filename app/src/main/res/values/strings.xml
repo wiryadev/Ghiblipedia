@@ -16,4 +16,7 @@
     <string name="directed_by">Directed by</string>
     <string name="clear_query">Clear Query</string>
     <string name="search">Search</string>
+    <string name="no_data_illustration">No Data Illustration</string>
+    <string name="empty_search_result">No data matches the title, \nSearch another title?</string>
+    <string name="empty_favorite">No film has been added to favorite</string>
 </resources>

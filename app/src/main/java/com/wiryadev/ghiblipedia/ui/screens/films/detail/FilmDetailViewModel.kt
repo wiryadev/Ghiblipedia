@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 data class FilmDetailUiState(
     val film: DetailFilm? = null,
     val isLoading: Boolean = false,
-    val errorMessages: String? = null,
+    val errorMessage: String? = null,
 )
 
 class FilmDetailViewModel(
@@ -27,32 +27,6 @@ class FilmDetailViewModel(
 
 
     private val filmId = FilmArgs(savedStateHandle).filmId
-
-//    val uiState: StateFlow<FilmDetailUiState> = repository.getFilmDetail(filmId).asResult()
-//        .map { result ->
-//            when (result) {
-//                is Result.Success -> FilmDetailUiState(
-//                    film = result.data,
-//                    isLoading = false
-//                )
-//
-//                is Result.Error -> {
-//                    FilmDetailUiState(
-//                        errorMessages = result.exception?.message,
-//                        isLoading = false,
-//                    )
-//                }
-//
-//                Result.Loading -> FilmDetailUiState(
-//                    isLoading = true
-//                )
-//            }
-//        }
-//        .stateIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.WhileSubscribed(5_000),
-//            initialValue = FilmDetailUiState()
-//        )
 
     val uiState: StateFlow<FilmDetailUiState> = combine(
         repository.getFilmDetail(filmId),
@@ -71,7 +45,7 @@ class FilmDetailViewModel(
                 )
 
                 is Result.Error -> FilmDetailUiState(
-                    errorMessages = detailFilmResult.exception?.message,
+                    errorMessage = detailFilmResult.exception?.message,
                     isLoading = false
                 )
 

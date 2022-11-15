@@ -1,6 +1,5 @@
 package com.wiryadev.ghiblipedia.ui.screens.films.list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wiryadev.ghiblipedia.data.GhibliRepository
@@ -61,7 +60,6 @@ class FilmsViewModel(
         )
 
     fun onSearchQueryChanged(newQuery: String) {
-        Log.d("onSearchQueryChanged", newQuery)
         searchQuery.value = newQuery
     }
 }

@@ -1,10 +1,8 @@
 package com.wiryadev.ghiblipedia.ui.screens.films.list
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,16 +10,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,7 +24,9 @@ import androidx.navigation.compose.composable
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.components.BottomNavigationHeight
+import com.wiryadev.ghiblipedia.ui.components.EmptyContent
 import com.wiryadev.ghiblipedia.ui.components.FilmCard
+import com.wiryadev.ghiblipedia.ui.components.LoadingContent
 import com.wiryadev.ghiblipedia.ui.components.SearchAppBar
 import com.wiryadev.ghiblipedia.utils.dummyFilm
 import org.koin.androidx.compose.getViewModel
@@ -66,7 +60,6 @@ fun FilmsRoute(
 
     FilmsScreen(
         uiState = uiState,
-//        onRefreshClicked = viewModel::refreshPage,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         navigateToDetail = navigateToDetail,
         modifier = modifier,
@@ -76,13 +69,11 @@ fun FilmsRoute(
 @Composable
 fun FilmsScreen(
     uiState: FilmsUiState,
-//    onRefreshClicked: () -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
-    var searchQuery by remember { mutableStateOf(TextFieldValue(uiState.query)) }
 
     Scaffold(
         topBar = {
@@ -112,35 +103,14 @@ fun FilmsScreen(
                     }
 
                     is FilmsUiState.NoData -> {
-                        Box(modifier = modifier.fillMaxSize()) {
-//                        TextButton(
-//                            onClick = onRefreshClicked,
-//                            modifier.fillMaxSize()
-//                        ) {
-                            Text(
-                                stringResource(id = R.string.retry),
-                                textAlign = TextAlign.Center,
-                            )
-//                        }
-                        }
+                        EmptyContent(
+                            message = stringResource(R.string.empty_search_result),
+                            illustration = R.drawable.ic_search_empty,
+                        )
                     }
                 }
             }
         )
-    }
-}
-
-@Composable
-fun LoadingContent(
-    empty: Boolean,
-    emptyContent: @Composable (Modifier) -> Unit,
-    content: @Composable (Modifier) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    if (empty) {
-        emptyContent(modifier)
-    } else {
-        content(modifier)
     }
 }
 
