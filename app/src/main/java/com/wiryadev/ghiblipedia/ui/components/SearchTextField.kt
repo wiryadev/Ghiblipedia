@@ -99,6 +99,8 @@ fun SearchTextField(
         modifier = modifier.shadow(
             elevation = 8.dp,
             shape = MaterialTheme.shapes.large,
+            ambientColor = MaterialTheme.colors.primary,
+            spotColor = MaterialTheme.colors.primary,
         )
     )
 }

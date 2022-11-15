@@ -11,11 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 class FilmsViewModel(
     private val repository: GhibliRepository
@@ -23,14 +20,6 @@ class FilmsViewModel(
 
     private val viewModelState = MutableStateFlow(FilmsViewModelState())
     private val searchQuery = MutableStateFlow("")
-
-//    val uiState: StateFlow<FilmsUiState> = viewModelState
-//        .map { it.toUiState() }
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.Eagerly,
-//            viewModelState.value.toUiState()
-//        )
 
     val uiState: StateFlow<FilmsUiState> = combine(
         repository.getFilms(),
@@ -75,34 +64,6 @@ class FilmsViewModel(
         Log.d("onSearchQueryChanged", newQuery)
         searchQuery.value = newQuery
     }
-
-//    init {
-//        refreshPage()
-//    }
-
-//    fun refreshPage() {
-//        viewModelScope.launch {
-//            repository.getFilms().asResult().collect { result ->
-//                viewModelState.update {
-//                    when (result) {
-//                        is Result.Success -> {
-//                            it.copy(films = result.data, isLoading = false)
-//                        }
-//
-//                        is Result.Error -> {
-//                            val errorMessages =
-//                                it.errorMessage + result.exception?.message.toString()
-//                            it.copy(errorMessages = errorMessages, isLoading = false)
-//                        }
-//
-//                        is Result.Loading -> {
-//                            it.copy(isLoading = true)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 private data class FilmsViewModelState(
