@@ -20,6 +20,7 @@ class GhiblipediApp : Application() {
             modules(
                 listOf(
                     networkModule,
+                    databaseModule,
                     repositoryModule,
                     viewModelModule,
                 )
