@@ -1,7 +1,6 @@
 package com.wiryadev.ghiblipedia.data.remote.retrofit
 
 import com.wiryadev.ghiblipedia.data.remote.model.FilmDto
-import com.wiryadev.ghiblipedia.model.Film
 import retrofit2.http.GET
 import retrofit2.http.Path
 

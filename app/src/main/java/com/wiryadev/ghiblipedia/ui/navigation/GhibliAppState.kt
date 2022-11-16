@@ -8,11 +8,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
-import com.wiryadev.ghiblipedia.ui.screens.about.aboutNavigationRoute
 import com.wiryadev.ghiblipedia.ui.screens.about.navigateToAbout
-import com.wiryadev.ghiblipedia.ui.screens.favorite.list.favoriteNavigationRoute
 import com.wiryadev.ghiblipedia.ui.screens.favorite.list.navigateToFavorite
-import com.wiryadev.ghiblipedia.ui.screens.films.list.homeNavigationRoute
 import com.wiryadev.ghiblipedia.ui.screens.films.list.navigateToHome
 
 @Composable
@@ -34,14 +31,6 @@ class GhibliAppState(
 
     val rootNavigationDestinations: List<RootNavigationDestination> = RootNavigationDestination.values().asList()
     private val rootNavigationDestinationRoute = rootNavigationDestinations.map { it.route }
-
-    val currentTopLevelDestination: RootNavigationDestination?
-        @Composable get() = when (currentDestination?.route) {
-            homeNavigationRoute -> RootNavigationDestination.HOME
-            favoriteNavigationRoute -> RootNavigationDestination.FAVORITE
-            aboutNavigationRoute -> RootNavigationDestination.ABOUT
-            else -> null
-        }
 
     val shouldShowBottomBar: Boolean
         @Composable get() = currentDestination?.route in rootNavigationDestinationRoute

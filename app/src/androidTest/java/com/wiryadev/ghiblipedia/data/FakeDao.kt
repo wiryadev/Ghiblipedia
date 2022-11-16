@@ -3,7 +3,6 @@ package com.wiryadev.ghiblipedia.data
 import com.wiryadev.ghiblipedia.data.local.dao.FilmDao
 import com.wiryadev.ghiblipedia.data.local.entity.FilmEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeDao : FilmDao {

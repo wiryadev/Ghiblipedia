@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class FilmsViewModel(
-    private val repository: GhibliRepository
+    repository: GhibliRepository
 ) : ViewModel() {
 
     private val viewModelState = MutableStateFlow(FilmsViewModelState())

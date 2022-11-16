@@ -1,6 +1,5 @@
 package com.wiryadev.ghiblipedia.data
 
-import com.wiryadev.ghiblipedia.data.local.entity.FilmEntity
 import com.wiryadev.ghiblipedia.model.Film
 import kotlinx.coroutines.flow.Flow
 
