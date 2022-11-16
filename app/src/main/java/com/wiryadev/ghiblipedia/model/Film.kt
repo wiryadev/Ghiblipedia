@@ -10,7 +10,7 @@ data class Film(
     val originalTitleRomanised: String,
     val producer: String,
     val director: String,
-    val releaseDate: String,
+    val releaseYear: String,
     val rating: String,
     val duration: String,
 )

@@ -9,12 +9,12 @@ android {
 
     defaultConfig {
         applicationId "com.wiryadev.ghiblipedia"
-        minSdk 21
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.wiryadev.ghiblipedia.InstrumentationTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -104,4 +104,5 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     androidTestImplementation "androidx.navigation:navigation-testing:2.5.3"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 }

@@ -1,6 +1,5 @@
 package com.wiryadev.ghiblipedia.ui.navigation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -16,7 +15,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.wiryadev.ghiblipedia.ui.components.BottomNavItem
 import com.wiryadev.ghiblipedia.ui.components.GhibliBottomNavBar
-import com.wiryadev.ghiblipedia.ui.components.GhibliTopAppBar
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

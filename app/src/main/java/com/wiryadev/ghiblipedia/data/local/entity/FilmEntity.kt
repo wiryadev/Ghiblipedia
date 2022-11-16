@@ -44,7 +44,7 @@ fun FilmEntity.asExternalModel() = Film(
     originalTitleRomanised = originalTitleRomanised,
     producer = producer,
     director = director,
-    releaseDate = releaseDate,
+    releaseYear = releaseDate,
     rating = rtScore,
     duration = runningTime
 )
@@ -59,7 +59,7 @@ fun Film.asEntity() = FilmEntity(
     originalTitle = originalTitle,
     originalTitleRomanised = originalTitleRomanised,
     producer = producer,
-    releaseDate = releaseDate,
+    releaseDate = releaseYear,
     runningTime = duration,
     rtScore = rating
 )

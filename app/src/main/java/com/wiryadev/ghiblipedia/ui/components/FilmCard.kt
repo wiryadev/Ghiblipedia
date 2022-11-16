@@ -118,7 +118,7 @@ fun FilmCardPreview() {
                 filmId = dummyFilm.id,
                 title = dummyFilm.title,
                 imageUrl = dummyFilm.posterUrl,
-                releaseDate = dummyFilm.releaseDate,
+                releaseDate = dummyFilm.releaseYear,
                 duration = dummyFilm.duration,
                 onItemClick = {},
             )

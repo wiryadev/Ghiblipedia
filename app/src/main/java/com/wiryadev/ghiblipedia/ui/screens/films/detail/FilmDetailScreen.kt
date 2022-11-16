@@ -202,7 +202,7 @@ private fun FilmDetailContent(
         }
         item {
             FilmDetailStat(
-                releaseDate = film.releaseDate,
+                releaseDate = film.releaseYear,
                 rating = film.rating,
                 duration = film.duration,
                 modifier = Modifier

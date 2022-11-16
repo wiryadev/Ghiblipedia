@@ -12,7 +12,7 @@ val dummyFilm = Film(
     description = "Two sisters move to the country with their father in order to be closer to their hospitalized mother, and discover the surrounding trees are inhabited by Totoros, magical spirits of the forest. When the youngest runs away from home, the older sister seeks help from the spirits to find her.",
     director = "Hayao Miyazaki",
     producer = "Hayao Miyazaki",
-    releaseDate = "1988",
+    releaseYear = "1988",
     duration = "86",
     rating = "93",
 )

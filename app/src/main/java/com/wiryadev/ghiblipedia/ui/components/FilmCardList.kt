@@ -12,10 +12,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.wiryadev.ghiblipedia.model.Film
 
-
+const val FilmsListTestTag = "FilmsListTestTag"
 @Composable
 fun FilmList(
     films: List<Film>,
@@ -32,7 +33,7 @@ fun FilmList(
             end = 16.dp,
         ),
         state = state,
-        modifier = modifier,
+        modifier = modifier.testTag(FilmsListTestTag),
     ) {
         filmCardItems(
             items = films,
@@ -57,7 +58,7 @@ fun <T> LazyListScope.filmCardItems(
             filmId = film.id,
             title = film.title,
             imageUrl = film.posterUrl,
-            releaseDate = film.releaseDate,
+            releaseDate = film.releaseYear,
             duration = film.duration,
             onItemClick = onItemClick,
             modifier = itemModifier.padding(vertical = 8.dp),
