@@ -54,9 +54,9 @@ class FilmsViewModel(
         }
         .map { it.toUiState() }
         .stateIn(
-            viewModelScope,
-            SharingStarted.Eagerly,
-            viewModelState.value.toUiState()
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = viewModelState.value.toUiState()
         )
 
     fun onSearchQueryChanged(newQuery: String) {
