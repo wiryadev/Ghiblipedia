@@ -18,7 +18,7 @@ import com.wiryadev.ghiblipedia.ui.components.EmptyContent
 import com.wiryadev.ghiblipedia.ui.components.FilmList
 import com.wiryadev.ghiblipedia.ui.components.LoadingContent
 import com.wiryadev.ghiblipedia.ui.components.SearchAppBar
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 const val homeNavigationRoute = "home"
 
@@ -43,7 +43,7 @@ fun NavGraphBuilder.homeScreen(
 fun FilmsRoute(
     navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: FilmsViewModel = getViewModel(),
+    viewModel: FilmsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

@@ -62,7 +62,7 @@ import com.wiryadev.ghiblipedia.model.Film
 import com.wiryadev.ghiblipedia.ui.components.EmptyContent
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import com.wiryadev.ghiblipedia.utils.dummyFilm
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 const val filmDetailRoute = "film_detail"
 private const val filmIdArg = "filmId"
@@ -92,7 +92,7 @@ fun NavGraphBuilder.filmDetailScreen(
 @Composable
 fun FilmDetailRoute(
     onBackPressed: () -> Unit,
-    viewModel: FilmDetailViewModel = getViewModel(),
+    viewModel: FilmDetailViewModel = koinViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) {
     val uiState by viewModel.uiState.collectAsState()

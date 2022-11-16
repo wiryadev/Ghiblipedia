@@ -19,7 +19,7 @@ import com.wiryadev.ghiblipedia.ui.components.EmptyContent
 import com.wiryadev.ghiblipedia.ui.components.FilmList
 import com.wiryadev.ghiblipedia.ui.components.GhibliTopAppBar
 import com.wiryadev.ghiblipedia.ui.components.LoadingContent
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 const val favoriteNavigationRoute = "favorite"
 
@@ -44,7 +44,7 @@ fun NavGraphBuilder.favoriteScreen(
 fun FavoriteRoute(
     navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: FavoriteViewModel = getViewModel()
+    viewModel: FavoriteViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
