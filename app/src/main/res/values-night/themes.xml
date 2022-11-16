@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Ghiblipedia" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Ghiblipedia" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorBackground">@color/gray</item>
+    </style>
     
     <style name="Theme.Ghiblipedia.Splashscreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenBackground">@color/gray</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_content</item>
         <item name="postSplashScreenTheme">@style/Theme.Ghiblipedia</item>
     </style>

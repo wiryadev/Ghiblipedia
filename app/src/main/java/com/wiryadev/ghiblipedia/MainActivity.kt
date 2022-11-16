@@ -3,6 +3,7 @@ package com.wiryadev.ghiblipedia
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -28,11 +29,12 @@ class MainActivity : ComponentActivity() {
             val appState = rememberAppState(navController = navController)
             
             val systemUiController = rememberSystemUiController()
+            val darkTheme = isSystemInDarkTheme()
             
             DisposableEffect(key1 = systemUiController) {
                 systemUiController.setSystemBarsColor(
                     color = Color.Transparent,
-                    darkIcons = true,
+                    darkIcons = !darkTheme,
                 )
 
                 onDispose {  }

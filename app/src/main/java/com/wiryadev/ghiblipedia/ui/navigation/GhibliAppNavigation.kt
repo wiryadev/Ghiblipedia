@@ -54,6 +54,7 @@ private fun BottomNavigation(
     GhibliBottomNavBar(
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.surface.copy(alpha = 0.9f),
+        contentColor = MaterialTheme.colors.primary,
         contentPadding = WindowInsets.navigationBars.asPaddingValues(),
     ) {
         destinations.forEach { destination ->
