@@ -31,7 +31,6 @@ import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +50,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -91,13 +92,14 @@ fun NavGraphBuilder.filmDetailScreen(
     }
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun FilmDetailRoute(
     onBackPressed: () -> Unit,
     viewModel: FilmDetailViewModel = koinViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     FilmDetailScreen(
         uiState = uiState,
