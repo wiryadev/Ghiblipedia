@@ -2,7 +2,11 @@ package com.wiryadev.ghiblipedia.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -15,12 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import com.wiryadev.ghiblipedia.utils.dummyFilm
+
 
 @Composable
 fun FilmCard(
@@ -29,8 +31,7 @@ fun FilmCard(
     imageUrl: String,
     releaseDate: String,
     duration: String,
-    isLoading: Boolean,
-    navigateToDetail: (String) -> Unit,
+    onItemClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -41,31 +42,19 @@ fun FilmCard(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { navigateToDetail(filmId) }
+                .clickable { onItemClick(filmId) }
                 .padding(8.dp),
         ) {
             PosterImage(
                 title = title,
                 imageUrl = imageUrl,
-                isLoading = isLoading,
-                modifier = Modifier
-                    .padding(end = 16.dp)
+                modifier = Modifier.padding(end = 16.dp)
             )
             Column {
-                FilmTitle(
-                    title = title,
-                    modifier = Modifier.placeholder(
-                        visible = isLoading,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-                )
+                FilmTitle(title = title)
                 ReleaseDateAndRunTime(
                     releaseDate = releaseDate,
                     duration = duration,
-                    modifier = Modifier.placeholder(
-                        visible = isLoading,
-                        highlight = PlaceholderHighlight.fade(),
-                    )
                 )
             }
         }
@@ -76,7 +65,6 @@ fun FilmCard(
 private fun PosterImage(
     imageUrl: String,
     title: String,
-    isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val painter = rememberAsyncImagePainter(model = imageUrl)
@@ -90,10 +78,6 @@ private fun PosterImage(
                 width = 60.dp,
             )
             .clip(MaterialTheme.shapes.small)
-            .placeholder(
-                visible = isLoading,
-                highlight = PlaceholderHighlight.fade(),
-            )
     )
 }
 
@@ -139,9 +123,7 @@ fun FilmCardPreview() {
                 imageUrl = dummyFilm.imageUrl,
                 releaseDate = dummyFilm.releaseDate,
                 duration = dummyFilm.duration,
-                isLoading = false,
-                navigateToDetail = {},
-
+                onItemClick = {},
             )
         }
     }

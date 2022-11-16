@@ -16,10 +16,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.ui.components.EmptyContent
+import com.wiryadev.ghiblipedia.ui.components.FilmList
 import com.wiryadev.ghiblipedia.ui.components.GhibliTopAppBar
 import com.wiryadev.ghiblipedia.ui.components.LoadingContent
-import com.wiryadev.ghiblipedia.ui.screens.films.list.FilmList
-import com.wiryadev.ghiblipedia.ui.screens.films.list.FilmsPlaceholder
 import org.koin.androidx.compose.getViewModel
 
 const val favoriteNavigationRoute = "favorite"
@@ -64,6 +63,7 @@ fun FavoriteScreen(
 ) {
     val lazyListState = rememberLazyListState()
     Scaffold(
+        modifier = modifier,
         topBar = {
             GhibliTopAppBar(title = stringResource(id = R.string.favorite))
         }
@@ -73,13 +73,11 @@ fun FavoriteScreen(
                 is FavoriteUiState.HasData -> false
                 is FavoriteUiState.NoData -> uiState.isLoading
             },
-            emptyContent = { FilmsPlaceholder() },
             content = {
                 when (uiState) {
                     is FavoriteUiState.HasData -> {
                         FilmList(
                             films = uiState.films,
-                            isLoading = uiState.isLoading,
                             navigateToDetail = navigateToDetail,
                             state = lazyListState,
                             modifier = Modifier.padding(padding)
