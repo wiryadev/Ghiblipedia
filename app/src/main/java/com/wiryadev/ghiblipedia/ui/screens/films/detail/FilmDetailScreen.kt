@@ -1,7 +1,6 @@
 package com.wiryadev.ghiblipedia.ui.screens.films.detail
 
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +8,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ContentAlpha
@@ -32,6 +33,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -52,8 +56,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
@@ -81,9 +85,7 @@ fun NavGraphBuilder.filmDetailScreen(
 ) {
     composable(
         route = "$filmDetailRoute/{$filmIdArg}",
-        arguments = listOf(
-            navArgument(filmIdArg) { NavType.StringType }
-        )
+        arguments = listOf(navArgument(filmIdArg) { NavType.StringType })
     ) {
         FilmDetailRoute(onBackPressed = onBackPressed)
     }
@@ -121,12 +123,10 @@ fun FilmDetailScreen(
                 FloatingActionButton(
                     onClick = onFavoriteClick,
                     modifier = Modifier
-                        .padding(
-                            bottom = 48.dp
-                        )
+                        .padding(bottom = 48.dp)
                         .semantics(mergeDescendants = true) {
                             contentDescription = "Favorite Button"
-                        }
+                        },
                 ) {
                     Icon(
                         imageVector = if (uiState.film.isFavorite) {
@@ -138,8 +138,7 @@ fun FilmDetailScreen(
                     )
                 }
             }
-
-        }
+        },
     ) { padding ->
         if (uiState.isLoading) {
             FilmDetailPlaceholder(
@@ -149,10 +148,10 @@ fun FilmDetailScreen(
             when {
                 uiState.film != null -> {
                     FilmDetailContent(
-                        detailFilm = uiState.film,
+                        film = uiState.film.data,
                         isLoading = false,
                         onBackPressed = onBackPressed,
-                        modifier = Modifier.padding(padding)
+                        modifier = Modifier.padding(padding),
                     )
                 }
 
@@ -172,10 +171,7 @@ private fun FilmDetailPlaceholder(
     onBackPressed: () -> Unit,
 ) {
     FilmDetailContent(
-        detailFilm = DetailFilm(
-            data = dummyFilm,
-            isFavorite = false
-        ),
+        film = dummyFilm,
         isLoading = true,
         onBackPressed = onBackPressed,
     )
@@ -183,36 +179,38 @@ private fun FilmDetailPlaceholder(
 
 @Composable
 private fun FilmDetailContent(
-    detailFilm: DetailFilm,
+    film: Film,
     isLoading: Boolean,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val film = detailFilm.data
-
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier,
     ) {
         item {
             FilmDetailHeader(
-                film = film,
+                title = film.title,
+                imageUrl = film.posterUrl,
+                bannerUrl = film.bannerUrl,
                 onBackPressed = onBackPressed,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
                     highlight = PlaceholderHighlight.fade(),
-                )
+                ),
             )
         }
         item {
             FilmDetailStat(
-                film = film,
+                releaseDate = film.releaseDate,
+                rating = film.rating,
+                duration = film.duration,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .placeholder(
                         visible = isLoading,
                         highlight = PlaceholderHighlight.fade(),
-                    )
+                    ),
             )
         }
         item {
@@ -228,14 +226,20 @@ private fun FilmDetailContent(
         }
         item {
             FilmMetadata(
-                film = film,
+                originalTitle = film.originalTitle,
+                originalTitleRomanised = film.originalTitleRomanised,
+                director = film.director,
+                producer = film.producer,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .placeholder(
                         visible = isLoading,
                         highlight = PlaceholderHighlight.fade(),
-                    )
+                    ),
             )
+        }
+        item {
+            Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
         }
     }
 }
@@ -259,56 +263,46 @@ fun BackButton(
 
 @Composable
 fun FilmDetailHeader(
-    film: Film,
+    title: String,
+    imageUrl: String,
+    bannerUrl: String,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(
         modifier = modifier.fillMaxWidth()
     ) {
-        val (banner, poster, title, back) = createRefs()
+        val (bannerSection, posterSection, titleSection, backNavigation) = createRefs()
 
-        FilmBannerImage(
-            film = film,
-            modifier = Modifier.constrainAs(banner) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        )
-        Column(
-            modifier = Modifier.constrainAs(back) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-            }
-        ) {
+        FilmBannerImage(imageUrl = bannerUrl, modifier = Modifier.constrainAs(bannerSection) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        })
+        Column(modifier = Modifier.constrainAs(backNavigation) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+        }) {
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
             BackButton(onBackPressed = onBackPressed)
         }
-        FilmPosterImage(
-            film = film,
-            modifier = Modifier.constrainAs(poster) {
-                top.linkTo(banner.bottom)
-                bottom.linkTo(banner.bottom)
-                start.linkTo(parent.start, margin = 16.dp)
-            }
-        )
-        FilmTitle(
-            title = film.title,
-            modifier = Modifier.constrainAs(title) {
-                top.linkTo(banner.bottom, margin = 8.dp)
-                start.linkTo(poster.end, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                width = Dimension.fillToConstraints
-            }
-        )
+        FilmPosterImage(imageUrl = imageUrl, modifier = Modifier.constrainAs(posterSection) {
+            top.linkTo(bannerSection.bottom)
+            bottom.linkTo(bannerSection.bottom)
+            start.linkTo(parent.start, margin = 16.dp)
+        })
+        FilmTitle(title = title, modifier = Modifier.constrainAs(titleSection) {
+            top.linkTo(bannerSection.bottom, margin = 8.dp)
+            start.linkTo(posterSection.end, margin = 16.dp)
+            end.linkTo(parent.end, margin = 16.dp)
+            width = Dimension.fillToConstraints
+        })
     }
 }
 
 @Composable
 fun FilmDetailStat(
-    film: Film,
-    modifier: Modifier = Modifier
+    releaseDate: String, rating: String, duration: String, modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -316,24 +310,22 @@ fun FilmDetailStat(
     ) {
         FilmStatBox(
             statTitle = stringResource(id = R.string.release),
-            statValue = film.releaseDate,
+            statValue = releaseDate,
         )
         FilmStatBox(
             statTitle = stringResource(id = R.string.rating),
-            statValue = film.rating,
+            statValue = rating,
         )
         FilmStatBox(
             statTitle = stringResource(id = R.string.runtime),
-            statValue = film.duration,
+            statValue = duration,
         )
     }
 }
 
 @Composable
 fun FilmStatBox(
-    statTitle: String,
-    statValue: String,
-    modifier: Modifier = Modifier
+    statTitle: String, statValue: String, modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -342,8 +334,7 @@ fun FilmStatBox(
     ) {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = statTitle,
-                style = MaterialTheme.typography.caption
+                text = statTitle, style = MaterialTheme.typography.caption
             )
         }
         Text(
@@ -370,7 +361,10 @@ fun FilmDescription(
 
 @Composable
 fun FilmMetadata(
-    film: Film,
+    originalTitle: String,
+    originalTitleRomanised: String,
+    director: String,
+    producer: String,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -384,7 +378,7 @@ fun FilmMetadata(
                 )
             }
             Text(
-                text = " ${film.originalTitle} (${film.originalTitleRomanised})",
+                text = " $originalTitle ($originalTitleRomanised)",
                 style = MaterialTheme.typography.caption,
             )
         }
@@ -396,7 +390,7 @@ fun FilmMetadata(
                 )
             }
             Text(
-                text = " ${film.director}",
+                text = " $director",
                 style = MaterialTheme.typography.caption,
             )
         }
@@ -408,7 +402,7 @@ fun FilmMetadata(
                 )
             }
             Text(
-                text = " ${film.producer}",
+                text = " $producer",
                 style = MaterialTheme.typography.caption,
             )
         }
@@ -417,38 +411,50 @@ fun FilmMetadata(
 
 @Composable
 private fun FilmBannerImage(
-    film: Film,
-    modifier: Modifier = Modifier
+    imageUrl: String, modifier: Modifier = Modifier
 ) {
-    val painter = rememberAsyncImagePainter(model = film.movieBannerUrl)
-    val isPainterLoading = painter.state is AsyncImagePainter.State.Loading
+    var isPainterLoading by remember {
+        mutableStateOf(true)
+    }
 
-    Image(
-        painter = painter,
-        contentDescription = film.title,
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = stringResource(R.string.film_banner),
         contentScale = ContentScale.FillBounds,
+        onState = { state ->
+            isPainterLoading = when (state) {
+                is AsyncImagePainter.State.Loading -> true
+                else -> false
+            }
+        },
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 180.dp)
             .alpha(.75f)
             .placeholder(
                 visible = isPainterLoading,
-                highlight = PlaceholderHighlight.fade()
+                highlight = PlaceholderHighlight.fade(),
             )
     )
 }
 
 @Composable
 private fun FilmPosterImage(
-    film: Film,
-    modifier: Modifier = Modifier
+    imageUrl: String, modifier: Modifier = Modifier
 ) {
-    val painter = rememberAsyncImagePainter(model = film.imageUrl)
-    val isPainterLoading = painter.state is AsyncImagePainter.State.Loading
+    var isPainterLoading by remember {
+        mutableStateOf(true)
+    }
 
-    Image(
-        painter = painter,
-        contentDescription = film.title,
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = stringResource(id = R.string.film_poster),
+        onState = { state ->
+            isPainterLoading = when (state) {
+                is AsyncImagePainter.State.Loading -> true
+                else -> false
+            }
+        },
         modifier = modifier
             .size(
                 height = 150.dp,
@@ -457,7 +463,7 @@ private fun FilmPosterImage(
             .clip(MaterialTheme.shapes.small)
             .placeholder(
                 visible = isPainterLoading,
-                highlight = PlaceholderHighlight.fade()
+                highlight = PlaceholderHighlight.fade(),
             )
     )
 }
@@ -480,10 +486,7 @@ fun DetailScreenPreview() {
     GhiblipediaTheme {
         Scaffold { padding ->
             FilmDetailContent(
-                detailFilm = DetailFilm(
-                    dummyFilm,
-                    false
-                ),
+                film = dummyFilm,
                 isLoading = false,
                 onBackPressed = { },
                 modifier = Modifier.padding(padding)

@@ -56,7 +56,7 @@ fun <T> LazyListScope.filmCardItems(
         FilmCard(
             filmId = film.id,
             title = film.title,
-            imageUrl = film.imageUrl,
+            imageUrl = film.posterUrl,
             releaseDate = film.releaseDate,
             duration = film.duration,
             onItemClick = onItemClick,

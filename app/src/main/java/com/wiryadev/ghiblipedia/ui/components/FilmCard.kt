@@ -1,6 +1,5 @@
 package com.wiryadev.ghiblipedia.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.wiryadev.ghiblipedia.R
 import com.wiryadev.ghiblipedia.ui.theme.GhiblipediaTheme
 import com.wiryadev.ghiblipedia.utils.dummyFilm
@@ -67,10 +66,8 @@ private fun PosterImage(
     title: String,
     modifier: Modifier = Modifier,
 ) {
-    val painter = rememberAsyncImagePainter(model = imageUrl)
-
-    Image(
-        painter = painter,
+    AsyncImage(
+        model = imageUrl,
         contentDescription = title,
         modifier = modifier
             .size(
@@ -120,7 +117,7 @@ fun FilmCardPreview() {
             FilmCard(
                 filmId = dummyFilm.id,
                 title = dummyFilm.title,
-                imageUrl = dummyFilm.imageUrl,
+                imageUrl = dummyFilm.posterUrl,
                 releaseDate = dummyFilm.releaseDate,
                 duration = dummyFilm.duration,
                 onItemClick = {},
